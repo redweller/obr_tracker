@@ -6,4 +6,5 @@ This extension adds following functions to the Owlbear Rodeo:
 - combat tracker, that lets you track rounds and turns of the characters on the map;
 - dice tracker, that lets you track who rolled what and when it happened;
 - dice roll sounds when a dice is cast by you or your fellow players.
+- 
 Each feature can be enabled or disabled via addon button.
