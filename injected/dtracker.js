@@ -115,12 +115,12 @@ const ORCTdice = (function () {
 	
 	let checkRolls = function (p, guid) {
 		if (p.tagName == 'P') {
-			const roll = p.innerHTML;
+			const roll = p.textContent;
 			const div = p.parentElement.firstElementChild;
 			if (div.className != 'css-1to936t') return;
 			const icon = div.firstElementChild.children[1].getAttribute('d');
 			const dice = getDice(icon);
-			const name = p.parentElement.parentElement.parentElement.parentElement.firstElementChild.innerHTML;
+			const name = p.parentElement.parentElement.parentElement.parentElement.firstElementChild.textContent;
 			if (name && icon && roll) {
 				if (!players[guid]) {
 					players[guid] = { [name] : { [dice] : { icon, rolls: [p]} } }; 

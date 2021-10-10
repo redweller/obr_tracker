@@ -96,11 +96,11 @@ const om = {
 		mapel: {},
 		init: function () {
 			this.mapel = document.getElementsByClassName('map')[0];
-			this.mapel.addEventListener("click", om.Sound.enable);
+			this.mapel.addEventListener('mouseup', om.Sound.enable);
 		},
 		enable: function () {
 			soundenabled = true;
-			om.Sound.mapel.removeEventListener( 'click', om.Sound.enable );
+			om.Sound.mapel.removeEventListener( 'mouseup', om.Sound.enable );
 		},
 		play: function () {
 			if (soundenabled && trackdicesound) trackdicesound.play(); 
