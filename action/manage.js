@@ -2,9 +2,6 @@
 //Licensed under the Apache License, Version 2.0
 
 let runtime = {};
-let storage = {};
-	let ttab = '';
-	let ttab_url = '';
 
 if (typeof browser !== 'undefined') runtime = browser.runtime;
 else runtime = chrome.runtime;
@@ -14,6 +11,8 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	let tab = {};
 	let pag = {};
 	let sdiv = '';
+	let ttab = '';
+	let ttab_url = '';
 	let saved = false;
 	let save = document.getElementById('save');
 	let title = document.getElementById('title');
