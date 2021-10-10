@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<style type="text/css">
+	
+	body {
+		text-align: center;
+		font-family: Arial;
+		font-size: 12px;
+		color: white;
+		width: 170px;
+		background-color:hsl(230, 25%, 18%);
+		border: 1px solid transparent;
+	}
+	
+	body #settings div div {
+		height: 25px;
+		padding-bottom: unset!important;
+	}
+	
+	button {
+	  font-size: 12px;
+	  width: auto;
+	  outline: none;
+	  margin: 0px;
+	  border-radius: 3px;
+	  margin-top: 5px;
+	  padding: 10px;
+	  color:white;
+	  border: 1px solid white;
+	  background:none;
+	}
+	
+	button:hover {
+		box-shadow: 1px 1px 5px lightgray;
+		border-color: #c57dd3;
+	}
+	
+	div#sessions div div:hover, #switcher div#sessions_button:hover, #switcher div#settings_button:hover {
+	    text-shadow: 0 1px 1px #88a0a3a1;
+		color:#c57dd3;
+	}
+	
+	button:hover[disabled] {
+		box-shadow: none;
+		border-color: gray;
+	}
+	
+	button[disabled] {
+		box-shadow: none;
+		border-color: gray;
+		color:gray;
+	}
+	
+	button:active {
+		border: 1px ridge;
+		background:none;
+		box-shadow: 1px 0px 5px lightgrey;
+	}
+
+	label {
+		margin: 2px 10px;
+		height: 15px;
+		display: inline-block;
+	}
+	
+	input {
+		float: right;
+		margin: 2px 10px;
+		margin-top: 3px;
+	}
+	
+	#header img {
+		padding:4px;
+		height:22px;
+		float:left;
+	}
+	
+	#header {
+		padding-bottom: 10px;
+	}
+	
+	#header .title {
+		font-weight:bold;
+		text-align:left;
+		padding-left:30px;
+		padding-bottom: 5px;
+		color:wheat;
+	}
+	
+	div#header div {
+		color: lightgray;
+		text-align:left;
+		padding-left:3px;
+	}
+
+	
+	div#settings, div#sessions {
+		background-color: #7788991c;
+		height: 130px;
+		padding: 5px;
+		text-align: left;
+		overflow: hidden;
+		transition: height 0.5s;
+	}
+	
+	#settings #title, #sessions .title {
+		padding: 6px;
+	}
+	
+	#switcher div#sessions_button, #switcher div#settings_button {
+		text-align: left;
+		border-top: 1px solid #7788994d;
+		cursor: pointer;
+		height: 20px;
+	}
+	
+	#switcher div span {
+		float: right;
+	}
+	
+	div#sessions div div {
+		margin: 2px 10px;
+		height: 15px;
+		cursor: pointer;
+	}</style>
+</head>
+<body>
+	<div id="header">
+		<img src="../images/owlington.png">
+		<div class="title">Owlbear Rodeo Combat Tracker</div>
+		<div>Combat tracker</div>
+		<div>Tested with v1.10.0.2</div>
+	</div>
+	<div id="switcher">
+		<div id="sessions_button">Recent sessions<span>▼</span></div>
+		<div id="sessions" style="height:0px;">
+			<div class="title">
+				Click on one of the links below to open your recent session
+			</div>
+			<div>
+				<div>No sessions found</div>
+			</div>
+		</div>
+		<div id="settings_button">Settings<span>▼</span></div>
+		<div id="settings">
+			<div id="title">
+				Select tracker modules and reload the game
+			</div>
+			<div>
+				<label for="enable_combat">Combat tracker</label>
+				<input type="checkbox" id="enable_combat">
+			</div><div>
+				<label for="enable_dice">Dice tray log</label>
+				<input type="checkbox" id="enable_dice">
+			</div><div>
+				<label for="enable_sound">Dice roll sounds</label>
+				<input type="checkbox" id="enable_sound">
+			</div><div>
+				<label for="enable_fs">Start fullscreen</label>
+				<input type="checkbox" id="enable_fs">
+			</div>
+		</div>
+	</div>
+	<button id="save">Change selection</button>
+	<script type="text/javascript" src="manage.js"></script>
+</body>
+</html>

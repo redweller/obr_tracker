@@ -1,0 +1,47 @@
+{
+	"name": "Owlbear Combat Tracker",
+	"description": "Simple combat tracker for Owlbear.rodeo tabletop map simulator. It lets you track combat turns, health and conditions of characters on the map.",
+	"version": "0.93",
+	"author": "Redweller (redweller@gmail.com)",
+	"manifest_version": 2,
+
+	"permissions": ["activeTab","tabs","storage"],
+
+	"icons": {
+		"16": "/images/combat16.png",
+		"32": "/images/combat32.png",
+		"48": "/images/combat48.png",
+		"128": "/images/combat128.png"
+	},
+	
+	"browser_action": {
+		"default_popup": "/action/markup.html",
+		"default_icon": {
+			"16": "/images/combat16.png",
+			"32": "/images/combat32.png",
+			"48": "/images/combat48.png",
+			"128": "/images/combat128.png"
+		}
+	},
+	
+	"background": {
+		"scripts" : [
+			"/action/storage.js", 
+			"background.js"
+		]
+	},
+	
+	"content_scripts": [
+		{
+			"matches": [ "https://*.owlbear.rodeo/*" ],
+			"run_at": "document_end",
+			"js": [ "contentscript.js" ]
+		}
+	],
+	  
+	"web_accessible_resources": [
+		"/injected/*.js",
+		"/injected/*.css",
+		"/audio/*.mp3"
+	]
+}

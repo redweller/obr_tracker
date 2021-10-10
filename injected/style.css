@@ -1,0 +1,213 @@
+.tracker table {font:normal}
+.tracker button {width:unset;height:unset;padding:1px 5px;}
+.tracker input {color:white;background-color:transparent;border:medium none;border-bottom:1px solid grey;border-radius: 2px;}
+.tracker input:focus {outline: 2px inset #566ab5ba;outline: auto;outline-color: #566ab5ba;}
+#turns button {padding:unset;}
+
+.inactive {opacity: 0.5;}
+
+.combatvals {display:table;padding-bottom:5px;padding-left:7px}
+.combatvals div {display: table-row;min-height:20px;padding-top:7px;}
+.combatvals div div {display: table-cell;padding-left:5px;}
+.combatvals input, .cv_effects input {height: 19px;width: 35px;}
+.cv_title {text-align:center;border-bottom:1px solid white; margin:0px 5px;padding-bottom:7px;padding-top:4px;}
+.cv_action {text-align:center; margin:0px 5px;border-top:1px solid white;}
+
+.cv_effects {display:table;padding-bottom:8px;padding-left:7px;}
+.cv_effects div {display: table-row;min-height:20px;padding-top:3px;}
+.cv_effects div div {display: table-cell;padding-left:5px;text-align:center;}
+.cv_effects svg {width: 15px; height: 15px;vertical-align:bottom;}
+
+.cv_settings {display:table;padding-bottom:8px;padding-left:5px;}
+.cv_settings div {display: table-row;min-height:20px;padding-top:3px;}
+.cv_settings div.header {font-weight:bold;height:23px;cursor: default;}
+.cv_settings input {height:18px;width:35px;}
+.cv_settings div div {display: table-cell;padding-left:5px;text-overflow: ellipsis;white-space: nowrap;max-width: 69px;}
+.cv_settings div div:first-child {overflow: hidden;cursor: default;}
+.cv_title label, .cv_title input {vertical-align: text-bottom;}
+
+.ct_hp a {color:#646464bd;}
+.ct_hp0 a, .ct_hp1 a, .ct_hp2 a {color: #a000006b;}
+.ct_hp3 a {color:green;}
+.ct_hp2 a.hp1, .ct_hp2 a.hp2 {color: #588000;}
+.ct_hp1 a.hp1 {color: #ad9200;}
+.set_btn {display:block;width:11px;height:11px;float:left;cursor:pointer;}
+
+.trackervals {display:table;padding:3px 0px;}
+.trackervals div {display: table-row;}
+.trackervals div:last-child {padding-right:10px}
+.trackervals div:first-child {padding-left:8px}
+.trackervals div:not(:first-child) {cursor: pointer;}
+.trackervals div div {display: table-cell;padding:2px 3px 2px 3px;max-width:72px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trackervals div .ct_name {width: 100%;}
+
+.turns {text-align:center;border-top:1px solid white;margin:0px 9px;padding:4px 0px;}
+.move_turn {cursor:pointer;}
+.next_turn {cursor:pointer;float:right}
+.prev_turn {cursor:pointer;float:left}
+.my_turn {background-color:rgba(132,111,111,0.3);}
+.move_turn svg {width: 11px;height: 11px;margin-left: 3px;margin-bottom: -1px;}
+
+.switcher button:hover {
+    cursor: pointer;
+    color: var(--theme-ui-colors-primary);
+}
+
+.switcher button {
+    padding: 4px;
+    width: 32px;
+    height: 32px;
+    appearance: none;
+    margin: 0px;
+    box-sizing: border-box;
+    border: none;
+    background-color: var(--theme-ui-colors-overlay);
+    border-radius: 50%;
+    color: inherit;
+}
+
+.switcher {
+    box-sizing: border-box;
+    min-width: 0px;
+    margin: 8px;
+    position: absolute;
+    right: 0;
+    background-color: var(--theme-ui-colors-overlay);
+    border-radius: 50%;
+}
+
+.tracker {
+	cursor:auto;
+	width:165px;
+	max-height:300px;
+	background-color:var(--theme-ui-colors-overlay);
+	padding:0px;
+	margin:8px;
+	border-radius:5px;
+	overflow-x:hidden;
+	overflow-y:auto;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+	font-size: 12px;
+}
+
+.off .tracker {
+    display: none!important;
+}
+
+#combatcontainer {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+#combatcontainer .tracker {
+	position:absolute;
+	top:40px;
+	right:50px;
+}
+
+#combatcontainer .switcher button {
+    top: 0px;
+    right: 52px;
+    position: absolute;
+}
+
+#combatcontainer.off .switcher button {
+    transform: rotate(225deg);
+}
+
+#combatcontainer.on .switcher button {
+    transform: rotate(45deg);
+}
+
+#combatcontainer.on .switcher button.docked {
+    transform: rotate(0deg);
+}
+
+#combatcontainer.off .switcher button.docked {
+    transform: rotate(180deg);
+}
+
+
+#dicecontainer {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+#dicecontainer .switcher button {
+    bottom: 0px;
+    right: 52px;
+    position: absolute;
+}
+
+#dicecontainer .switcher {
+	bottom: 0px;
+}
+
+#dicecontainer .tracker {
+	position:absolute;
+	bottom:40px;
+	right:0px;
+	overflow: hidden;
+	display: flex;
+    flex-direction: column-reverse;
+	max-height: 250px;
+}
+
+#dicecontainer.on .switcher button {
+    transform: rotate(180deg);
+}
+
+.dicelog {
+    margin: 5px 0px;
+}
+
+.dicelog .entry {
+	padding: 3px 9px;
+}
+
+.dicelog .entry {
+	opacity: 0.5;
+	cursor: default;
+}
+
+.dicelog .entry:hover {
+    background-color: rgba(132,111,111,0.3);
+	opacity: unset;
+}
+
+.dicelog .entry:last-child {
+    opacity: unset;
+}
+
+.dicelog .entry div:first-child {
+	float: left;
+}
+
+.dicelog .entry div:last-child {
+    line-height: 15px;
+    margin-left: 34px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.dicelog .entry div:last-child .dice {
+    margin-left: 0px;
+}
+
+.dice svg {
+    width: 15px;
+    height: 15px;
+	vertical-align: bottom;
+}
+
+.dicelog .entry div:last-child .dice {
+    display: none;
+	width:100%;
+}
+
+.dicelog .entry:last-child div:last-child .dice, .dicelog .entry:hover div:last-child .dice {
+    display: unset;
+}
