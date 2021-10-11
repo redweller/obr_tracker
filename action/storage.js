@@ -23,10 +23,10 @@ const storage =  (function () {
 	}
 	
 	const checkSettingsOnInit = function (set) {
-		settings.combat = (set.combat?true:false);
-		settings.dice = (set.dice?true:false);
-		settings.sound = (set.sound?true:false);
-		settings.fs = (set.fs?true:false);
+		settings.combat = set.combat || false ;
+		settings.dice = set.dice || false ;
+		settings.sound = set.sound || false ;
+		settings.fs = set.fs || false ;
 	}
 	
 	const processSessionsLog = function (time, guid, url) {
