@@ -84,7 +84,7 @@ const ORCTcombat = (function () {
 		}
 		
 		if (turns.currentRound != curturn) {
-			if (om.safeCheckVar(ORCTdice)) {
+			if (typeof ORCTdice !== 'undefined') {
 				if (turns.currentRound) {
 					ORCTdice.outputLog('Combat round '+turns.currentRound);
 				} else {
