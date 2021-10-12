@@ -67,7 +67,7 @@ const om = {
 			}
 			if (settings.combat) {
 				if (this.safeCheckVar(ORCTcombat)) {
-					ORCTcombat.setGUID(localStorage.guid);
+					ORCTcombat.setGUID(localconfig.guid);
 					build(ORCTcombat);
 				}
 			}
