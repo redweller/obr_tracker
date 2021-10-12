@@ -9,7 +9,9 @@ This extension adds following functions to the Owlbear Rodeo:
 - **Dice tracker**, that lets you track who rolled what and when it happened.
 - **Extension button** allows toggling modules on/off and keeps track of your games.
 
-OBR Combat Tracker works only with [Owlbear Rodeo](https://owlbear.rodeo) and was tested with OBR v1.10.0.2.
+OBR Tracker works only with [Owlbear Rodeo](https://owlbear.rodeo) and was tested with OBR v1.10.0.2.
+
+Note: OBR Tracker is developed independently, and is not officially endorsed by or affiliated with Owlbear Rodeo.
 
 ## Combat tracker
 
