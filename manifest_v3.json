@@ -1,7 +1,7 @@
 {
-	"name": "Owlbear Combat Tracker",
-	"description": "Simple combat tracker for Owlbear.rodeo tabletop map simulator. It lets you track combat turns, health and conditions of characters on the map.",
-	"version": "0.95",
+	"name": "Owlbear Rodeo Tracker",
+	"description": "Add-on for Owlbear Rodeo tabletop map simulator. Track dice rolls, combat turns, health and conditions of characters on the map.",
+	"version": "0.96",
 	"author": "Redweller (redweller@gmail.com)",
 	"manifest_version": 3,
 
