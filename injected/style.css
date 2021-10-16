@@ -24,6 +24,7 @@
 .cv_settings input {height:18px;width:35px;}
 .cv_settings div div {display: table-cell;padding-left:5px;text-overflow: ellipsis;white-space: nowrap;max-width: 69px;}
 .cv_settings div div:first-child {overflow: hidden;cursor: default;}
+.cv_settings div div.double input { background-color: #a42b2b6b; }
 .cv_title label, .cv_title input {vertical-align: text-bottom;}
 
 .ct_hp a {color:#646464bd;}

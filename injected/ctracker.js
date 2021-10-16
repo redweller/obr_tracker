@@ -306,7 +306,29 @@ const ORCTcombat = (function () {
 		turns = {};
 		refreshTracker();
 	}
-
+	
+	function checkInit() {
+		const inits = [];
+		const cont = document.querySelector('.cv_settings');
+		if (!cont) return;
+		for (const itm of cont.children) {
+			if (itm.children[1].children[0]) {
+				const thisinit = itm.children[1].children[0].value;
+				itm.children[1].className = '';
+				if (thisinit && !isNaN(thisinit)) {
+					if (!inits[thisinit]) {
+						inits[thisinit] = [itm.children[1].children[0]];
+					} else {
+						inits[thisinit].push(itm.children[1].children[0]);
+						for (const i in inits[thisinit]) {
+							inits[thisinit][i].parentElement.className = 'double';
+						}
+					}
+				}
+			}
+		}
+	}
+	
 
 	function outputCombat(ch) {
 		var c = combatants[ch];
@@ -396,7 +418,7 @@ const ORCTcombat = (function () {
 			<div><div><label for="ct_init">Initiative</label></div><div><input type="text" id="ct_init" size="5" value="${vals.init}"></div></div>
 			<div><div><label for="ct_hp">Health</label>/<label for="ct_dmg">dmg</label></div><div>
 				<input type="text" id="ct_hp" size="1.5" value="${vals.hp}">
-				<input type="text" id="ct_dmg" size="1.5" value="${vals.dmg}">
+				<input type="text" id="ct_dmg" onClick="this.setSelectionRange(0, this.value.length)"size="1.5" value="${vals.dmg}">
 			</div></div>
 		</div><div class="cv_effects">
 			<div><div>Effects</div><div>Name</div><div>Rounds</div></div>
@@ -446,8 +468,20 @@ const ORCTcombat = (function () {
 				var l = combatants[c].id;
 				html += `<div>
 					<div title="${combatants[c].name}">${combatants[c].name}</div>
-					<div><input type="text" id="ct_init_${l}" size="1" value="${(combatants[c].init?combatants[c].init:'')}"></div>
-					<div><input type="text" id="ct_hp_${l}" size="1" value="${(combat[l]?(combat[l].hp?combat[l].hp:''):'')}"></div>
+					<div>
+						<input 
+							type="text" id="ct_init_${l}" size="1" 
+							onkeyup="ORCTcombat.control.checkInit()" 
+							value="${(combatants[c].init?combatants[c].init:'')}"
+						>
+					</div>
+					<div>
+						<input 
+							type="text" id="ct_hp_${l}" size="1" 
+							value="${(combat[l]?(combat[l].hp?combat[l].hp:''):'')}"
+							onClick="this.setSelectionRange(0, this.value.length)"
+						>
+					</div>
 				</div>
 				`;
 			}
@@ -461,6 +495,7 @@ const ORCTcombat = (function () {
 		</button></div>
 		`;
 		tracker.innerHTML = html;
+		checkInit();
 	}
 
 let oc = {
@@ -508,6 +543,7 @@ let oc = {
 		setValues,
 		setInitValues,
 		switchMapOwner,
+		checkInit,
 	},
 	
 };
