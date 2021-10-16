@@ -260,7 +260,7 @@ let od = {
 		
 		if (dicebar) {
 			dicebar.onclick = function () {
-				if (dicebar.children[12].ariaLabel=='Share Dice Rolls') {
+				if (dicebar.children[12].getAttribute('aria-label')=='Share Dice Rolls') {
 					dicebar.children[12].click();
 				}
 				dicewipe = false;
