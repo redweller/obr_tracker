@@ -5,12 +5,14 @@ const ORCTdice = (function () {
 	
 	const obsconfig = {childList: true, subtree: true,};
 	const players = {};
+	const player_trays = [];
 	let lognode = {};
 	let om = {};
 	let yourdice = '';
 	let dicewipe = false;
 	let dicetimer = 0;
 	let dicetracker;
+	
 		
 	
 	const obNeedles = {
@@ -61,8 +63,10 @@ const ORCTdice = (function () {
 				}
 			}
 			if (change.removedNodes.length)  {
-				if (change.removedNodes[0].children[0])
+				if (change.removedNodes[0].children[0]) {
 					od.outputLog(getPlayerName(change.removedNodes[0]) + ' leaves');
+					delete player_trays[getPlayerName(change.removedNodes[0])];
+				}
 			}
 		}
 	}
@@ -141,8 +145,15 @@ const ORCTdice = (function () {
 	let checkTray = function (player) {
 		const icon = player.getElementsByTagName('button');
 		if (icon[0]) {
-			if (icon[0].title == 'Show Rolls')
+			if (icon[0].title == 'Show Rolls') {
 				icon[0].click();
+				const pname = getPlayerName(player);
+				if (player_trays[pname]) od.outputLog(pname+' tempts fate');
+				else {
+					player_trays[pname] = true;
+					player.setAttribute('belongs',pname);
+				}
+			}
 		}
 	}
 	
@@ -160,8 +171,15 @@ const ORCTdice = (function () {
 	}
 	
 	let getPlayerName = function (node) {
-		if (node.children) return node.children[0].innerText;
-		else return '';
+		if (node.parentElement) {
+			if (node.parentElement.className == 'simplebar-content') {
+				if (node.children) return node.children[0].innerText;
+			} else if (node.parentElement.parentElement.className == 'simplebar-content') {
+				return node.parentElement.children[0].innerText;
+			}
+		} else if (node.children) {
+			return node.children[0].innerText;
+		} else return '';
 	}
 	
 	let getIconFromParent = function (node) {
@@ -242,11 +260,18 @@ let od = {
 		
 		if (dicebar) {
 			dicebar.onclick = function () {
-				if (dicebar.lastElementChild.ariaLabel=='Share Dice Rolls') {
-					dicebar.lastElementChild.click();
+				if (dicebar.children[12].ariaLabel=='Share Dice Rolls') {
+					dicebar.children[12].click();
 				}
 				dicewipe = false;
 			};
+			dicebar.lastElementChild.style.display = 'none';
+			const newbutton = document.createElement('button');
+			newbutton.innerHTML = dicebar.lastElementChild.innerHTML;
+			newbutton.className = "css-4y7911-IconButton";
+			newbutton.style.color = "gray";
+			newbutton.title = "Sharing can't be switched off";
+			dicebar.appendChild(newbutton);
 		}
 		
 		if (dicetray) {
