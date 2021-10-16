@@ -23,7 +23,7 @@ Combat tracker should be managed by one player (usually GM) and other players on
 
 Adds dice log to keep track of player's dice rolls, with information on what exactly happened and when. It takes the dice values from left panel and puts them to a new small log overlay in the bottom-right corner of the screen. Unlike the native dice panel, it shows individual dice rolls with the timestamp, so no more wondering what dice were cast if the player has multiple dice in his tray.
 
-It also optionally adds dice roll sounds when a dice is cast by user or other players. It also prevents abusing dice rerolls, and makes dice tray collapce on click.
+It also optionally adds dice roll sounds when a dice is cast by user or other players. It also prevents abusing dice rerolls, and makes dice tray collapse on click.
 
 ## Extension button
 
