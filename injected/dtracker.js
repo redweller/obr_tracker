@@ -9,7 +9,6 @@ const ORCTdice = (function () {
 	let lognode = {};
 	let om = {};
 	let yourdice = '';
-	let dicewipe = false;
 	let dicetimer = 0;
 	let dicetracker;
 	
@@ -89,32 +88,50 @@ const ORCTdice = (function () {
 		for (const node of nodes) {
 			if (node.className == obNeedles.dice_result_p_css) {
 				checkRolls(node, guid);
-			} else if (node.firstElementChild.className == obNeedles.dice_result_parent_css) {
-				const nodes = node.getElementsByClassName(obNeedles.dice_result_p_css);
-				for (const diceval of nodes) {
-					checkRolls(diceval, guid);
+				continue;
+			}
+			if (node.firstElementChild) {
+				if (node.firstElementChild.className == obNeedles.dice_result_parent_css) {
+					const nodes = node.getElementsByClassName(obNeedles.dice_result_p_css);
+					for (const diceval of nodes) {
+						checkRolls(diceval, guid);
+					}
+					checkTray(node);
+					continue;
 				}
-				checkTray(node);
-			} else {
-				const nodes = node.getElementsByClassName(obNeedles.dice_result_p_css);
-				for (const diceval of nodes) {
-					checkRolls(diceval, guid);
-				}
+			}
+			const nodes = node.getElementsByClassName(obNeedles.dice_result_p_css);
+			for (const diceval of nodes) {
+				checkRolls(diceval, guid);
 			}
 		}
 	}
 	
 	let monitorPlayer = function () {
 		const curtime = om.getTimeInt();
+		const trayarea = document.querySelector("div.css-q2g4a8");
+		const hidebutton = document.querySelector("button.css-ww5hk0-IconButton");
+		const resetbutton = document.querySelector("button.css-1frvkv-IconButton");
 		if ((curtime-dicetimer)>2000) {
 			dicetimer = 0;
+			if (resetbutton) {
+				trayarea.style.pointerEvents = 'auto';
+				hidebutton.style.pointerEvents = 'auto';
+				resetbutton.style.pointerEvents = 'auto';
+			}
 			dicetracker = clearInterval(dicetracker);
 			outputDice(yourdice);
 			yourdice = '';
-			dicewipe = true;
 			return;
 		}
-		if (!dicetracker) dicetracker = setInterval(monitorPlayer, 1000);
+		if (!dicetracker) {
+			dicetracker = setInterval(monitorPlayer, 1000);
+			trayarea.style.pointerEvents = 'none';
+			if (resetbutton) {
+				hidebutton.style.pointerEvents = 'none';
+				resetbutton.style.pointerEvents = 'none';
+			}
+		}
 	}
 	
 	let checkRolls = function (p, guid) {
@@ -247,6 +264,7 @@ let od = {
 		om = ORCT;
 		
 		const sidebar = document.getElementsByClassName('simplebar-content')[0];
+		const trayswitch = document.querySelector("button.css-ww5hk0-IconButton");
 		const dicebar = document.getElementsByClassName('css-phv10r')[0];
 		const dicetray = document.getElementsByTagName('canvas')[0];
 		const sheet = window.document.styleSheets[0];
@@ -263,7 +281,6 @@ let od = {
 				if (dicebar.children[12].getAttribute('aria-label')=='Share Dice Rolls') {
 					dicebar.children[12].click();
 				}
-				dicewipe = false;
 			};
 			dicebar.lastElementChild.style.display = 'none';
 			const newbutton = document.createElement('button');
@@ -277,19 +294,23 @@ let od = {
 		if (dicetray) {
 			dicetray.onclick = function () {
 				const trayclose = document.getElementsByClassName('css-ww5hk0-IconButton')[0];
-				const dicereset = document.getElementsByClassName('css-1frvkv-IconButton')[0];
 				if (trayclose) {
-					if (yourdice) {
-						if (dicereset) {
-							players[yourdice] = [];
-							dicereset.click();
-						}
-					} else if (trayclose.title=='Hide Dice Tray') {
+					if (trayclose.title=='Hide Dice Tray') {
 						trayclose.click();
-						dicewipe = true;
 					}
 				}
 			};
+		}
+		
+		if (trayswitch) {
+			trayswitch.addEventListener( 'click', function () {
+				if (!yourdice) {
+					const trayclose = document.getElementsByClassName('css-ww5hk0-IconButton')[0];
+					const dicereset = document.getElementsByClassName('css-1frvkv-IconButton')[0];
+					if (trayclose.title != 'Show Dice Tray') return;
+					if (dicereset) dicereset.click();
+				}
+			});
 		}
 		
 		this.node.onwheel = scrollTracker;
