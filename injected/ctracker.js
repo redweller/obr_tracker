@@ -112,9 +112,16 @@ const ORCTcombat = (function () {
 		const curtext = transport.attrs.text;
 		if (wrapped != curtext) {
 			const noteobj = Konva.shapes[container].parent;
-			const updateNote = noteobj.eventListeners.click[0].handler;
-			updateNote(noteobj);
+			const callForDialog = noteobj.eventListeners.click[0].handler;
+			const evtobj = {
+				currentTarget: noteobj, 
+				target: Konva.shapes[container], 
+				pointerId: 999, 
+				evt: { isTrusted: true }
+			};
+			callForDialog(evtobj);
 			const delivery = document.getElementById('changeNoteText');
+			if (!delivery) return;
 			delivery.parentElement.parentElement.style.display = 'none';
 			if (delivery) {
 				let changeNote = {}
