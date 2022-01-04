@@ -15,10 +15,11 @@ const ORCTcombat = (function () {
 	let	container;
 	let combatants;
 	let curturn;
+	let mapGUID;
 
 
 	function refreshState() {
-		if (!processTracker) refreshTracker();
+		refreshTracker();
 		if (master && Object.keys(combat).length) sendPackage();
 	}
 
@@ -39,11 +40,11 @@ const ORCTcombat = (function () {
 		receivePackage();
 		
 		for (var shp in Konva.shapes) {
-			entity = Konva.shapes[shp]._partialText;
-			if (entity) {
-				entity = Konva.shapes[shp];
+			const entity = Konva.shapes[shp];
+			if (entity._partialText) {
 				if (entity.parent.parent.parent.parent.attrs['name'] == 'character') {
-					var id = entity.parent.parent.parent.parent.attrs.id;
+					var id = entity.parent.parent.parent.parent.attrs.id.slice(0,8);
+					window.NEW = entity.parent.parent.parent.parent
 					var combatant = {
 						id: id,
 						salt: entity.parent.parent.parent.parent._id,
@@ -75,6 +76,19 @@ const ORCTcombat = (function () {
 					if (Konva.shapes[shp].attrs.text[0] == '!') 
 						container = shp;
 				}
+			} else if (entity._id == 2) {
+				if (!entity.attrs.image) continue;
+				const src = entity.attrs.image.currentSrc;
+				if (mapGUID) {
+					if (mapGUID != src) {
+						mapGUID = src;
+						combat = {};
+						combatants = [];
+						turns = {};
+					}
+				} else {
+					mapGUID = src;
+				}
 			};
 		}
 		
@@ -83,7 +97,7 @@ const ORCTcombat = (function () {
 			list = outputCombat(c) + list;
 		}
 		
-		if (turns.currentRound != curturn) {
+		if ((turns) && (turns.currentRound != curturn)) {
 			if (typeof ORCTdice !== 'undefined') {
 				if (turns.currentRound) {
 					ORCTdice.outputLog('Combat round '+turns.currentRound);
@@ -94,21 +108,32 @@ const ORCTcombat = (function () {
 			}
 		}
 		
-		tracker.innerHTML = '<div class="trackervals">'+list+'</div>'+manageTurns();	
+		tracker.innerHTML = '<div class="wrapscroll"><div class="trackervals">'+list+'</div></div>'+manageTurns();	
 		if (!processTracker) processTracker = setInterval(refreshTracker, 3000);
 	}
 
 
 	function sendPackage() {
 		const transport = Konva.shapes[container];
+		const cmbtr = {};
 		if (!transport) return;
+		for (const c in combat) {
+			cmbtr[c] = [];
+			for (const prop in combat[c]) {
+				cmbtr[c].push(combat[c][prop]);
+			}
+		}
 		const pckg = JSON.stringify({
 			guid,
 			turns,
-			combat,
+			cmbtr,
 		});
 		const packed = LZString.compressToBase64(pckg);
 		const wrapped = '!|' + packed + '|';
+		if (wrapped.length>1024) {
+			console.log('Note character limit reached');
+			return;
+		}
 		const curtext = transport.attrs.text;
 		if (wrapped != curtext) {
 			const noteobj = Konva.shapes[container].parent;
@@ -144,6 +169,23 @@ const ORCTcombat = (function () {
 					var pckg = om.safeJSONParse(LZString.decompressFromBase64(unwrap[1]));
 					if (pckg) {
 						if (pckg.guid) {
+							if (pckg.cmbtr) {
+								pckg.combat = {};
+								for (const c in pckg.cmbtr) {
+									const itm = pckg.cmbtr[c];
+									pckg.combat[c] = {
+										init: itm[0],
+										hp: itm[1],
+										dmg: itm[2],
+										eff1: itm[3],
+										eff2: itm[4],
+										eff3: itm[5],
+										dur1: itm[6],
+										dur2: itm[7],
+										dur3: itm[8],
+									}
+								}
+							}
 							if (pckg.guid != guid) {
 								combat = pckg.combat;
 								turns = pckg.turns;
@@ -236,6 +278,7 @@ const ORCTcombat = (function () {
 			var curchar = combatants[curnum];
 			var thisturn = true;
 			if (curnum ==0) thisturn = false;
+			else if (!curchar) thisturn = false;
 			else if (!curchar.init) thisturn = false;
 			if (thisturn) {
 				turns.active = curchar.id;
@@ -253,7 +296,7 @@ const ORCTcombat = (function () {
 				turns.current = 0;
 			}
 		}
-		refreshTracker();
+		refreshState();
 	}
 
 
@@ -303,12 +346,14 @@ const ORCTcombat = (function () {
 		return e;
 	}
 
-	function flushInit() {
-		for (var c in combatants) {
-			combatants[c].init = '';
-		}
-		for (var t in combat) {
-			combat[t].init = '';
+	function flushInit(keepInit) {
+		if (!keepInit) {
+			for (var c in combatants) {
+				combatants[c].init = '';
+			}
+			for (var t in combat) {
+				combat[t].init = '';
+			}
 		}
 		turns = {};
 		refreshTracker();
@@ -336,6 +381,11 @@ const ORCTcombat = (function () {
 		}
 	}
 	
+	
+	function scrollTracker(event) {
+		for (const node of event.path) if (node.className == 'wrapscroll') var tnode = node;
+		tnode.scrollTop = tnode.scrollTop + event.deltaY;
+	}
 
 	function outputCombat(ch) {
 		var c = combatants[ch];
@@ -360,10 +410,17 @@ const ORCTcombat = (function () {
 		<button class="css-1olwjck-IconButton" style="float:left" onClick="ORCTcombat.control.refreshTracker()" title="Cancel">
 			${om.getIcon('cancel')}
 		</button> 
-		<button class="css-1olwjck-IconButton" style="float:right" onClick="ORCTcombat.control.flushInit()" title="Reset combat">
-			${om.getIcon('save')}
-		</button>
-		<div>End combat and reset INIT?</div>
+		<div class="finishtext">
+			<div class="finishbutton ">
+				<button class="css-1olwjck-IconButton" onClick="ORCTcombat.control.flushInit()" title="Finish combat and RESET initiative">
+					${om.getIcon('save')}
+				</button>
+				<button class="css-1olwjck-IconButton" style="color:green" onClick="ORCTcombat.control.flushInit('preserve')" title="Finish combat and keep initiative">
+					${om.getIcon('save')}
+				</button>
+			</div>
+			<span>End combat and reset INIT?</span>
+		</div>
 		`;
 	}
 
@@ -378,8 +435,8 @@ const ORCTcombat = (function () {
 				<span class="next_turn" onClick="ORCTcombat.control.nextTurn()" title="Next turn">
 					${om.getIcon('next')}
 				</span>
-				<span class="prev_turn" onClick="ORCTcombat.control.prevTurn()" title="Previous turn">
-					${om.getIcon('previous')}
+				<span class="prev_turn" onClick="ORCTcombat.control.endCombat()" title="Finish combat">
+					${om.getIcon('swords')}
 				</span>
 			</div>
 			`;
@@ -465,7 +522,7 @@ const ORCTcombat = (function () {
 		</div>
 		`;
 		if (master) {
-			html += `
+			html += `<div class="wrapscroll">
 				<form onsubmit="ORCTcombat.control.setInitValues()" autocomplete="off">
 				<input type="submit" style="position: absolute; left: -9999px"/>
 				<div class="cv_settings">
@@ -493,7 +550,7 @@ const ORCTcombat = (function () {
 				`;
 			}
 		}
-		html += `</div><div class="cv_action">
+		html += `</div></div></form><div class="cv_action">
 		<button class="css-1olwjck-IconButton" onClick="ORCTcombat.control.refreshTracker()" title="Cancel">
 			${om.getIcon('cancel')}
 		</button> 
@@ -532,6 +589,7 @@ let oc = {
 		window.onfocus = resumeState;
 		
 		if (!processTracker) refreshTracker();
+		this.node.onwheel = scrollTracker;
 		
 	},
 	
@@ -551,6 +609,9 @@ let oc = {
 		setInitValues,
 		switchMapOwner,
 		checkInit,
+		
+		turns: () => {return turns},
+		combat: () => {return combat},
 	},
 	
 };
