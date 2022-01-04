@@ -1,10 +1,16 @@
 //Copyright 2021 Redweller (redweller@gmail.com)
 //Licensed under the Apache License, Version 2.0
 
-let runtime = {};
+let runtime;
+let getLocaleText;
 
-if (typeof browser !== 'undefined') runtime = browser.runtime;
-else runtime = chrome.runtime;
+if (typeof browser !== 'undefined') {
+	runtime = browser.runtime;
+	getLocaleText = browser.i18n.getMessage;
+} else {
+	runtime = chrome.runtime;
+	getLocaleText = chrome.i18n.getMessage;
+}
 
 runtime.sendMessage({method: "getStorage"}, function(result) {
 	
@@ -25,46 +31,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 
 	const siteq = /https:\/\/([\w.]*)owlbear\.rodeo([\w\/.]*)/;
 	const pageq = /https:\/\/([\w.]*)owlbear\.rodeo\/game\/([\w\/.]*)/;
-
-	const texts = {
-		select_modules_and_start: "Select tracker modules and start or join the existing game",
-		select_modules_and_goto: "Select tracker modules and proceed to Owlbear Rodeo to start",
-		select_modules_and_reload:"Select tracker modules and reload the game",
-		goto_owlbear_tab: "Switch to Owlbear",
-		open_owlbear_page:"Open Owlbear",
-		change_selection: "Change selection",
-		save_settings: "Save settings",
-		saved_settings: "Saved!",
-		reload_to_apply: "Reload page to apply settings",
-	}
 	
-	const week = [
-		'Sun',
-		'Mon',
-		'Tue',
-		'Wed',
-		'Thu',
-		'Fri',
-		'Sat',
-		'yesterday',
-		'today',
-		'now! › ',
-	]
-
-	const month = [
-		'Jan',
-		'Feb',
-		'Mar',
-		'Apr',
-		'May',
-		'Jun',
-		'Jul',
-		'Aug',
-		'Sep',
-		'Oct',
-		'Nov',
-		'Dec',
-	]
 	
 	const switcher = document.getElementById('switcher');
 	const sessions_button = document.getElementById('sessions_button');
@@ -73,13 +40,11 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	sessions_button.addEventListener('click', function () {
 		document.getElementById('settings').style.height = '0px';
 		document.getElementById('sessions').style.height = '130px';
-		//switcher.appendChild(sessions_button);
 	});
 
 	settings_button.addEventListener('click', function () {
 		document.getElementById('settings').style.height = '130px';
 		document.getElementById('sessions').style.height = '0px';
-		//switcher.appendChild(settings_button);
 	});
 
 	
@@ -97,18 +62,38 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	c_sound.addEventListener('click', resetAction);
 	c_fullscreen.addEventListener('click', resetAction);
 	
+	localize(document.body);
+	document.body.style.display = 'inherit';
+	
 	const manifestData = chrome.runtime.getManifest();
 	const subtitle = document.getElementById('header').children[2];
-	subtitle.textContent = 'Combat tracker v'+manifestData.version+'.'+manifestData.manifest_version;
+	subtitle.textContent += ' v'+manifestData.version+':'+manifestData.manifest_version;
+	
+	function localize (parentnode) {
+		for (const node of parentnode.children) {
+			if (node.children.length) {
+				localize(node);
+			} else {
+				const check_node = node.innerText.match(/__MSG_([\w_]*)__/);
+				if (check_node) {
+					node.innerText = getLocaleText(check_node[1]);
+				}
+			}
+		}
+	}
 	
 	function getRelatedDay (date) {
 		const today = new Date();
 		const thatday = new Date(date);
 		const yesterday = new Date();
 		yesterday.setDate(today.getDate()-1);
-		if ((today.getDate() == thatday.getDate()) && (today.getMonth() == thatday.getMonth())) return 8;
-		if ((yesterday.getDate() == thatday.getDate()) && (yesterday.getMonth() == thatday.getMonth())) return 7;
-		return thatday.getDay();
+		if ((today.getDate() == thatday.getDate()) && 
+			(today.getMonth() == thatday.getMonth()) ) 
+			return getLocaleText('date_today');
+		if ((yesterday.getDate() == thatday.getDate()) && 
+			(yesterday.getMonth() == thatday.getMonth())) 
+			return getLocaleText('date_yesterday');
+		return thatday.toLocaleString('default', { weekday: 'short' });;
 	}
 	
 	function showSessions () {
@@ -125,11 +110,11 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 				const hr = ( th_dte.getHours() >9 ? '' : '0' ) + th_dte.getHours();
 				const min = ( th_dte.getMinutes() >9 ? '' : '0' ) + th_dte.getMinutes();
 				
-				let mon = th_dte.getMonth();
+				let mon = th_dte.toLocaleString('default', { month: 'short' });
 				let wday = getRelatedDay(th_dte);
-				if (ttab_url == th_url) wday = 9;
+				if (ttab_url == th_url) wday = getLocaleText('date_now');
 				
-				const textday = month[mon] + ' ' + day + ' (' + week[wday] + ') ';
+				const textday = getLocaleText('popup_sessions_date',[day,mon]) + ' (' + wday + ') ';
 				
 				const record = document.createElement('div');
 				record.setAttribute('title','Session ID: '+l[e].guid);
@@ -140,8 +125,9 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 					chrome.tabs.create({url: th_url});
 					window.close();
 				};
-				if (wday == 9) record.onclick = function () {
-					chrome.tabs.update(ttab, {active: true});
+				if (ttab_url == th_url) record.onclick = function () {
+					if (ttab)
+						chrome.tabs.update(ttab, {active: true});
 					window.close();
 				};
 			}
@@ -154,16 +140,16 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 		
 		if (!pag.siteq) {
 			
-			title.textContent = texts.select_modules_and_goto;
+			title.textContent = getLocaleText('select_modules_and_goto');
 			if (ttab) {
-				save.textContent = texts.goto_owlbear_tab;
+				save.textContent = getLocaleText('goto_owlbear_tab');
 				save.disabled = false;
 				save.onclick = function () {
 					chrome.tabs.update(ttab, {active: true});
 					window.close();
 				}
 			} else {
-				save.textContent = texts.open_owlbear_page;
+				save.textContent = getLocaleText('open_owlbear_page');
 				save.disabled = false;
 				save.onclick = function () {
 					chrome.tabs.create({url:'https://www.owlbear.rodeo/'});
@@ -174,23 +160,23 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 		} else {
 			
 			if (!pag.pageq) {
-				title.textContent = texts.select_modules_and_start;
+				title.textContent = getLocaleText('select_modules_and_start');
 				save.disabled = true;
 				if (saved) {
-					save.textContent = texts.saved_settings;
+					save.textContent = getLocaleText('saved_settings');
 				} else {
-					save.textContent = texts.save_settings;
+					save.textContent = getLocaleText('save_settings');
 				}
 			} else {
-				title.textContent = texts.select_modules_and_reload;
+				title.textContent = getLocaleText('select_modules_and_reload');
 				if (saved) {
-					save.textContent = texts.reload_to_apply;
+					save.textContent = getLocaleText('reload_to_apply');
 					save.onclick = function () {
 						chrome.tabs.reload(tab.id);
 						window.close();
 					}
 				} else {
-					save.textContent = texts.save_settings;
+					save.textContent = getLocaleText('save_settings');
 					save.disabled = true;
 				}
 			}
@@ -198,7 +184,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	}
 
 	function resetAction() {
-		save.textContent = texts.save_settings;
+		save.textContent = getLocaleText('save_settings');
 		saved = false;
 		save.disabled = false;
 		save.onclick = function () {
@@ -223,7 +209,6 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 		tab = tabs[0];
 		if (tab.url.match(siteq) == null) {
 			pag.siteq = false;
-			save.textContent = 'You need to open Owlbear';
 			chrome.tabs.query({active: false, currentWindow: true},function(tabs) {
 				for (var t in tabs) {
 					if (tabs[t].url.match(siteq) != null) {

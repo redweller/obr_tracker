@@ -2,169 +2,46 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<style type="text/css">
-
-	body {
-		text-align: center;
-		font-family: Arial;
-		font-size: 12px;
-		color: white;
-		width: 170px;
-		background-color:hsl(230, 25%, 18%);
-		border: 1px solid transparent;
-		overflow: clip;
-	}
-	
-	body #settings div div {
-		height: 25px;
-		padding-bottom: unset!important;
-	}
-	
-	button {
-	  font-size: 12px;
-	  width: auto;
-	  outline: none;
-	  margin: 0px;
-	  border-radius: 3px;
-	  margin-top: 5px;
-	  padding: 10px;
-	  color:white;
-	  border: 1px solid white;
-	  background:none;
-	}
-	
-	button:hover {
-		box-shadow: 1px 1px 5px lightgray;
-		border-color: #c57dd3;
-	}
-	
-	div#sessions div div:hover, #switcher div#sessions_button:hover, #switcher div#settings_button:hover {
-	    text-shadow: 0 1px 1px #88a0a3a1;
-		color:#c57dd3;
-	}
-	
-	button:hover[disabled] {
-		box-shadow: none;
-		border-color: gray;
-	}
-	
-	button[disabled] {
-		box-shadow: none;
-		border-color: gray;
-		color:gray;
-	}
-	
-	button:active {
-		border: 1px ridge;
-		background:none;
-		box-shadow: 1px 0px 5px lightgrey;
-	}
-
-	label {
-		margin: 2px 10px;
-		height: 15px;
-		display: inline-block;
-	}
-	
-	input {
-		float: right;
-		margin: 2px 10px;
-		margin-top: 3px;
-	}
-	
-	#header img {
-		padding:4px;
-		height:22px;
-		float:left;
-	}
-	
-	#header {
-		padding-bottom: 10px;
-	}
-	
-	#header .title {
-		font-weight:bold;
-		text-align:left;
-		padding-left:30px;
-		padding-bottom: 5px;
-		color:wheat;
-	}
-	
-	div#header div {
-		color: lightgray;
-		text-align:left;
-		padding-left:3px;
-	}
-
-	
-	div#settings, div#sessions {
-		background-color: #7788991c;
-		height: 135px;
-		padding: 5px;
-		text-align: left;
-		overflow: hidden;
-		transition: height 0.5s;
-	}
-	
-	#settings #title, #sessions .title {
-		padding: 6px;
-	}
-	
-	#switcher div#sessions_button, #switcher div#settings_button {
-		text-align: left;
-		border-top: 1px solid #7788994d;
-		cursor: pointer;
-		height: 20px;
-	}
-	
-	#switcher div span {
-		float: right;
-	}
-	
-	div#sessions div div {
-		margin: 2px 10px;
-		height: 15px;
-		cursor: pointer;
-	}</style>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
+<body style="display:none">
 	<div id="header">
 		<img src="../images/owlington.png">
-		<div class="title">Owlbear Rodeo Combat Tracker</div>
-		<div>Combat tracker</div>
-		<div>Tested with v1.10.0.2</div>
+		<div class="title">__MSG_extensionName__</div>
+		<div>__MSG_popup_orct_version__</div>
+		<div><span>__MSG_popup_or_version__</span> v1.10.1.1b</div>
 	</div>
 	<div id="switcher">
-		<div id="sessions_button">Recent sessions<span>▼</span></div>
+		<div id="sessions_button"><a>__MSG_popup_sessions__</a><span>▼</span></div>
 		<div id="sessions" style="height:0px;">
 			<div class="title">
-				Click on one of the links below to open your recent session
+				__MSG_select_recent_sessions__
 			</div>
 			<div>
-				<div>No sessions found</div>
+				<div>__MSG_popup_no_sessions__</div>
 			</div>
 		</div>
-		<div id="settings_button">Settings<span>▼</span></div>
+		<div id="settings_button"><a>__MSG_popup_settings__</a><span>▼</span></div>
 		<div id="settings">
 			<div id="title">
-				Select tracker modules and reload the game
+				__MSG_select_modules_and_reload__
 			</div>
 			<div>
-				<label for="enable_combat">Combat tracker</label>
+				<label for="enable_combat">__MSG_option_combat_tracker__</label>
 				<input type="checkbox" id="enable_combat">
 			</div><div>
-				<label for="enable_dice">Dice tray log</label>
+				<label for="enable_dice">__MSG_option_dice_tray__</label>
 				<input type="checkbox" id="enable_dice">
 			</div><div>
-				<label for="enable_sound">Dice roll sounds</label>
+				<label for="enable_sound">__MSG_option_dice_sound__</label>
 				<input type="checkbox" id="enable_sound">
 			</div><div>
-				<label for="enable_fs">Start fullscreen</label>
+				<label for="enable_fs">__MSG_option_fullscreen__</label>
 				<input type="checkbox" id="enable_fs">
 			</div>
 		</div>
 	</div>
-	<button id="save">Change selection</button>
+	<button id="save">__MSG_save_settings__</button>
 	<script type="text/javascript" src="manage.js"></script>
 </body>
 </html>
