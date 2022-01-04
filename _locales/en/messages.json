@@ -1,0 +1,33 @@
+{
+	
+	"extensionName": { "message": "Owlbear Rodeo Tracker" },
+	"extensionDescription": { "message": "Add-on for Owlbear Rodeo tabletop map simulator. Track dice rolls, combat turns, health and conditions of characters on the map." },
+	
+	
+	"date_today": { "message": "today" },
+	"date_yesterday": { "message": "yesterday" },
+	"date_now": { "message": "now! › " },
+	
+	"popup_orct_version": { "message": "Combat tracker" },
+	"popup_or_version": { "message": "Tested with" },
+	"popup_sessions": { "message": "Recent sessions" },
+	"popup_settings": { "message": "Settings" },
+	"popup_no_sessions": { "message": "No sessions found" },
+	
+	"popup_sessions_date": { "message": "$2 $1", "description": "Order of date ($1) and month ($2)" },
+	
+	"option_combat_tracker": { "message": "Combat tracker" },
+	"option_dice_tray": { "message": "Dice tray log" },
+	"option_dice_sound": { "message": "Dice roll sounds" },
+	"option_fullscreen": { "message": "Start fullscreen" },
+	
+	"select_recent_sessions": { "message": "Click on one of the links below to open your recent session" },
+	"select_modules_and_reload": { "message": "Select tracker modules and reload the game" },
+	"select_modules_and_goto": { "message": "Select tracker modules and proceed to Owlbear Rodeo to start" },
+	"select_modules_and_start": { "message": "Select tracker modules and start or join the existing game" },
+	"goto_owlbear_tab": { "message": "Switch to Owlbear" },
+	"open_owlbear_page": { "message": "Open Owlbear" },
+	"save_settings": { "message": "Save settings" },
+	"saved_settings": { "message": "Saved!" },
+	"reload_to_apply": { "message": "Reload page to apply settings" }
+}

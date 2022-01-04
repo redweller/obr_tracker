@@ -1,0 +1,33 @@
+{
+	
+	"extensionName": { "message": "Трекер для Owlbear Rodeo" },
+	"extensionDescription": { "message": "Простой трекер для симулятора настольной карты Owlbear Rodeo. Он позволяет отслеживать ходы, статы и броски кубов в процессе игры." },
+	
+	
+	"date_today": { "message": "сегодня" },
+	"date_yesterday": { "message": "вчера" },
+	"date_now": { "message": "сейчас! › " },
+	
+	"popup_orct_version": { "message": "Расширение" },
+	"popup_or_version": { "message": "Совместимо с" },
+	"popup_sessions": { "message": "Последние игры" },
+	"popup_settings": { "message": "Настройки" },
+	"popup_no_sessions": { "message": "Сессий не найдено" },
+	
+	"popup_sessions_date": { "message": "$1 $2", "description": "Order of date ($1) and month ($2)" },
+	
+	"option_combat_tracker": { "message": "Трекер боёв" },
+	"option_dice_tray": { "message": "Трекер кубиков" },
+	"option_dice_sound": { "message": "Звуки кубиков" },
+	"option_fullscreen": { "message": "Свернуть панели" },
+	
+	"select_recent_sessions": { "message": "Нажмите на одну из ссылок ниже, чтобы открыть недавнюю игру" },
+	"select_modules_and_reload": { "message": "Выберите модули и перезагрузите для применения изменений" },
+	"select_modules_and_goto": { "message": "Выберите модули и откройте Owlbear Rodeo, чтобы начать играть" },
+	"select_modules_and_start": { "message": "Выберите модули и создайте или присоединитесь к игре" },
+	"goto_owlbear_tab": { "message": "Перейти на Owlbear" },
+	"open_owlbear_page": { "message": "Открыть Owlbear" },
+	"save_settings": { "message": "Сохранить настройки" },
+	"saved_settings": { "message": "Сохранено!" },
+	"reload_to_apply": { "message": "Перезагрузите страницу" }
+}
