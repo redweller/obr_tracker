@@ -70,15 +70,18 @@ runtime.sendMessage({method: "getSettings"}, function(response) {
 			let dice = document.getElementsByClassName(cls1);
 			let reroll = document.getElementsByClassName(cls2);
 			if (dice.length != 7) return;
-			//if (reroll.length != 1) return;
 			for (var d=0; d<7; d++) {
 				dice[d].addEventListener( 'click', function () {
 					dicesound.play();
 				})
 			}
-			/*reroll[0].addEventListener( 'click', function () {
-				document.getElementById("traysound").play();
-			})*/
+			if (!settings.dice) {
+				if (reroll.length == 1) { // reroll button only appears on roll :(
+					reroll[0].addEventListener( 'click', function () {
+						traysound.play();
+					})
+				}
+			}
 			docbody.removeEventListener( 'click', makeItSound );
 		}
 		docbody.addEventListener( 'click', makeItSound );
