@@ -235,7 +235,7 @@ const ORCTcombat = (function () {
 				combat[id]['dur'+i] = newdur;
 			}
 		}
-		refreshTracker();
+		refreshState();
 	}
 
 	function setInitValues() {
@@ -256,7 +256,7 @@ const ORCTcombat = (function () {
 				}
 			}
 		}
-		refreshTracker();
+		refreshState();
 	}
 
 	function passEffects() {
@@ -356,7 +356,7 @@ const ORCTcombat = (function () {
 			}
 		}
 		turns = {};
-		refreshTracker();
+		refreshState();
 	}
 	
 	function checkInit() {
