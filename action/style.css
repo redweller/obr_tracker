@@ -7,6 +7,7 @@ body {
 	background-color:hsl(230, 25%, 18%);
 	border: 1px solid transparent;
 	overflow: clip;
+	margin: 8px;
 }
 
 body #settings div div {
@@ -20,7 +21,7 @@ button {
   outline: none;
   margin: 0px;
   border-radius: 3px;
-  margin-top: 5px;
+  margin-top: 8px;
   padding: 10px;
   color:white;
   border: 1px solid white;
@@ -82,6 +83,15 @@ input {
 	padding-left:30px;
 	padding-bottom: 5px;
 	color:wheat;
+}
+
+#header .version {
+	line-height: 17px;
+}
+
+#header .manifest {
+    font-size: 9px;
+    vertical-align: top;
 }
 
 div#header div {

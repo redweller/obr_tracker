@@ -56,6 +56,8 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	if (s.dice) c_dicet.checked = true;
 	if (s.sound) c_sound.checked = true;
 	if (s.fs) c_fullscreen.checked = true;
+	
+	if (isMobile()) document.body.style.margin = 'auto';
 
 	c_combt.addEventListener('click', resetAction);
 	c_dicet.addEventListener('click', resetAction);
@@ -67,13 +69,26 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	
 	const manifestData = chrome.runtime.getManifest();
 	const subtitle = document.getElementById('header').children[2];
-	subtitle.textContent += ' v'+manifestData.version+':'+manifestData.manifest_version;
+	const manifest = document.createElement('span');
+	manifest.innerText = ' ('+manifestData.manifest_version+')';
+	manifest.className = 'manifest';
+	subtitle.textContent += ' v'+manifestData.version;
+	subtitle.appendChild(manifest);
+	
+	function isMobile () {
+		if ("userAgentData" in navigator) {
+			return navigator.userAgentData.mobile;
+		} else {
+			return navigator.userAgent.match('Mobile');
+		}
+	}
 	
 	function localize (parentnode) {
 		for (const node of parentnode.children) {
 			if (node.children.length) {
 				localize(node);
 			} else {
+				if (!node.innerText) continue;
 				const check_node = node.innerText.match(/__MSG_([\w_]*)__/);
 				if (check_node) {
 					node.innerText = getLocaleText(check_node[1]);
