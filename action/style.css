@@ -1,123 +1,122 @@
+body {
+	text-align: center;
+	font-family: Arial;
+	font-size: 12px;
+	color: white;
+	width: 170px;
+	background-color:hsl(230, 25%, 18%);
+	border: 1px solid transparent;
+	overflow: clip;
+}
 
-	body {
-		text-align: center;
-		font-family: Arial;
-		font-size: 12px;
-		color: white;
-		width: 170px;
-		background-color:hsl(230, 25%, 18%);
-		border: 1px solid transparent;
-		overflow: clip;
-	}
-	
-	body #settings div div {
-		height: 25px;
-		padding-bottom: unset!important;
-	}
-	
-	button {
-	  font-size: 12px;
-	  width: auto;
-	  outline: none;
-	  margin: 0px;
-	  border-radius: 3px;
-	  margin-top: 5px;
-	  padding: 10px;
-	  color:white;
-	  border: 1px solid white;
-	  background:none;
-	}
-	
-	button:hover {
-		box-shadow: 1px 1px 5px lightgray;
-		border-color: #c57dd3;
-	}
-	
-	div#sessions div div:hover, #switcher div#sessions_button:hover, #switcher div#settings_button:hover {
-	    text-shadow: 0 1px 1px #88a0a3a1;
-		color:#c57dd3;
-	}
-	
-	button:hover[disabled] {
-		box-shadow: none;
-		border-color: gray;
-	}
-	
-	button[disabled] {
-		box-shadow: none;
-		border-color: gray;
-		color:gray;
-	}
-	
-	button:active {
-		border: 1px ridge;
-		background:none;
-		box-shadow: 1px 0px 5px lightgrey;
-	}
+body #settings div div {
+	height: 25px;
+	padding-bottom: unset!important;
+}
 
-	label {
-		margin: 2px 10px;
-		height: 15px;
-		display: inline-block;
-	}
-	
-	input {
-		float: right;
-		margin: 2px 10px;
-		margin-top: 3px;
-	}
-	
-	#header img {
-		padding:4px;
-		height:22px;
-		float:left;
-	}
-	
-	#header {
-		padding-bottom: 10px;
-	}
-	
-	#header .title {
-		font-weight:bold;
-		text-align:left;
-		padding-left:30px;
-		padding-bottom: 5px;
-		color:wheat;
-	}
-	
-	div#header div {
-		color: lightgray;
-		text-align:left;
-		padding-left:3px;
-	}
+button {
+  font-size: 12px;
+  width: auto;
+  outline: none;
+  margin: 0px;
+  border-radius: 3px;
+  margin-top: 5px;
+  padding: 10px;
+  color:white;
+  border: 1px solid white;
+  background:none;
+}
 
-	
-	div#settings, div#sessions {
-		background-color: #7788991c;
-		height: 135px;
-		padding: 5px;
-		text-align: left;
-		overflow: hidden;
-		transition: height 0.5s;
-	}
-	
-	#settings #title, #sessions .title {
-		padding: 6px;
-	}
-	
-	#switcher div#sessions_button, #switcher div#settings_button {
-		text-align: left;
-		border-top: 1px solid #7788994d;
-		cursor: pointer;
-		height: 20px;
-	}
-	
-	#switcher div span {
-		float: right;
-	}
-	
-	div#sessions div div {
-		margin: 2px 10px;
-		height: 15px;
-		cursor: pointer;
-	}
+button:hover {
+	box-shadow: 1px 1px 5px lightgray;
+	border-color: #c57dd3;
+}
+
+div#sessions div div:hover, #switcher div#sessions_button:hover, #switcher div#settings_button:hover {
+	text-shadow: 0 1px 1px #88a0a3a1;
+	color:#c57dd3;
+}
+
+button:hover[disabled] {
+	box-shadow: none;
+	border-color: gray;
+}
+
+button[disabled] {
+	box-shadow: none;
+	border-color: gray;
+	color:gray;
+}
+
+button:active {
+	border: 1px ridge;
+	background:none;
+	box-shadow: 1px 0px 5px lightgrey;
+}
+
+label {
+	margin: 2px 10px;
+	height: 15px;
+	display: inline-block;
+}
+
+input {
+	float: right;
+	margin: 2px 10px;
+	margin-top: 3px;
+}
+
+#header img {
+	padding:4px;
+	height:22px;
+	float:left;
+}
+
+#header {
+	padding-bottom: 10px;
+}
+
+#header .title {
+	font-weight:bold;
+	text-align:left;
+	padding-left:30px;
+	padding-bottom: 5px;
+	color:wheat;
+}
+
+div#header div {
+	color: lightgray;
+	text-align:left;
+	padding-left:3px;
+}
+
+
+div#settings, div#sessions {
+	background-color: #7788991c;
+	height: 135px;
+	padding: 5px;
+	text-align: left;
+	overflow: hidden;
+	transition: height 0.5s;
+}
+
+#settings #title, #sessions .title {
+	padding: 6px;
+}
+
+#switcher div#sessions_button, #switcher div#settings_button {
+	text-align: left;
+	border-top: 1px solid #7788994d;
+	cursor: pointer;
+	height: 20px;
+}
+
+#switcher div span {
+	float: right;
+}
+
+div#sessions div div {
+	margin: 2px 10px;
+	height: 15px;
+	cursor: pointer;
+}
