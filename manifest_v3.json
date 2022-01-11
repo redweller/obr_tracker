@@ -1,7 +1,7 @@
 {
 	"name": "__MSG_extensionName__",
 	"description": "__MSG_extensionDescription__",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"author": "Redweller (redweller@gmail.com)",
 	"manifest_version": 3,
 	"default_locale": "en",
