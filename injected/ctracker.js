@@ -147,6 +147,7 @@ const ORCTcombat = (function () {
 			callForDialog(evtobj);
 			const delivery = document.getElementById('changeNoteText');
 			if (!delivery) return;
+			if (delivery.value[0] != '!') return;
 			delivery.parentElement.parentElement.style.display = 'none';
 			if (delivery) {
 				let changeNote = {}
