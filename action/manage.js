@@ -33,6 +33,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	const pageq = /https:\/\/([\w.]*)owlbear\.rodeo\/game\/([\w\/.]*)/;
 	
 	
+	const locale = getLocaleText('current_locale');
 	const switcher = document.getElementById('switcher');
 	const sessions_button = document.getElementById('sessions_button');
 	const settings_button = document.getElementById('settings_button');
@@ -66,6 +67,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	
 	localize(document.body);
 	document.body.style.display = 'inherit';
+	document.documentElement.lang = locale;
 	
 	const manifestData = chrome.runtime.getManifest();
 	const subtitle = document.getElementById('header').children[2];

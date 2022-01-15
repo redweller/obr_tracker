@@ -2,6 +2,7 @@
 	
 	"extensionName": { "message": "Owlbear Rodeo Tracker" },
 	"extensionDescription": { "message": "Add-on for Owlbear Rodeo tabletop map simulator. Track dice rolls, combat turns, health and conditions of characters on the map." },
+	"current_locale": { "message": "en" },	
 	
 	
 	"date_today": { "message": "today" },

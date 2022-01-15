@@ -2,6 +2,7 @@
 	
 	"extensionName": { "message": "Трекер для Owlbear Rodeo" },
 	"extensionDescription": { "message": "Простой трекер для симулятора настольной карты Owlbear Rodeo. Он позволяет отслеживать ходы, статы и броски кубов в процессе игры." },
+	"current_locale": { "message": "ru" },
 	
 	
 	"date_today": { "message": "сегодня" },
