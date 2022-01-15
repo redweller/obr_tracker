@@ -5,7 +5,6 @@ const ORCTcombat = (function () {
 	
 	let	master = true;
 	let locked = false;
-	let	dialog = false;
 	let guid = false;
 	let	combat = {};
 	let	turns = {};
@@ -474,8 +473,8 @@ const ORCTcombat = (function () {
 	function enterValues(ch) {
 		if (!master) return;
 		processTracker = clearInterval(processTracker);
-		name = combatants[ch].name;
-		id = combatants[ch].id;
+		let name = combatants[ch].name;
+		let id = combatants[ch].id;
 		if (!combat[id]) vals = {init:'',hp:'',dmg:'',eff1:'',eff2:'',eff3:'',dur1:'',dur2:'',dur3:''};
 		else vals = combat[id] ;
 		settrack = `
