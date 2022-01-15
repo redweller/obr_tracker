@@ -36,6 +36,7 @@ const ORCTcombat = (function () {
 	function refreshTracker() {
 		
 		let list = '';
+		let need_container = '';
 		combatants = [];
 		receivePackage();
 		
@@ -74,7 +75,7 @@ const ORCTcombat = (function () {
 					combatants[combatant.sort] = combatant;
 				} else {
 					if (Konva.shapes[shp].attrs.text[0] == '!') 
-						container = shp;
+						need_container = shp;
 				}
 			} else if (entity._id == 2) {
 				if (!entity.attrs.image) continue;
@@ -91,6 +92,8 @@ const ORCTcombat = (function () {
 				}
 			};
 		}
+		
+		container = need_container;
 		
 		for (var c in combatants) {
 			if (combatants[c].id == turns.active) combatants[c].turn = 'my_turn';
