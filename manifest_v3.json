@@ -1,7 +1,7 @@
 {
 	"name": "__MSG_extensionName__",
 	"description": "__MSG_extensionDescription__",
-	"version": "1.1.2",
+	"version": "1.2.0",
 	"author": "Redweller (redweller@gmail.com)",
 	"manifest_version": 3,
 	"default_locale": "en",
@@ -44,6 +44,7 @@
 			"resources": [
 				"/injected/*.js",
 				"/injected/*.css",
+				"/action/help.html",
 				"/audio/*.mp3"
 			],
 			"matches": [  
