@@ -30,5 +30,11 @@
 	"open_owlbear_page": { "message": "Open Owlbear" },
 	"save_settings": { "message": "Save settings" },
 	"saved_settings": { "message": "Saved!" },
-	"reload_to_apply": { "message": "Reload page to apply settings" }
+	"reload_to_apply": { "message": "Reload page to apply settings" },
+	
+	"help_icon": { "message": "Help" },
+	"help_about_link": { "message": "About" },
+	"help_howto_link": { "message": "User Guide" },
+	"help_relnotes_link": { "message": "Release Notes" },
+	"help_close_link": { "message": "Close" }
 }

@@ -1,5 +1,6 @@
 .tracker table {font:normal}
 .tracker button {width:unset;height:unset;padding:1px 5px;}
+.tracker button.client {display:none;}
 .tracker input {color:white;background-color:transparent;border:medium none;border-bottom:1px solid grey;border-radius: 2px;}
 .tracker input:focus {outline: 2px inset #566ab5ba;outline: auto;outline-color: #566ab5ba;}
 #turns button {padding:unset;}
@@ -221,6 +222,14 @@
 #cbtab_info.client .bg_check {
 	display: none;
 }
+.info_text svg {
+    width: 15px;
+    height: 15px;
+    vertical-align: bottom;
+}
+.info_helper {
+    height: 38px;
+}
 .notecheck {
     display: inline-block;
     height: 26px;
@@ -239,6 +248,19 @@ div#note_occupied {
     width: 3%;
 }
 
+#combatcontainer #helpico {
+	width: 28px;
+	height: 26px;
+	float: right;
+	font-size: 7px;
+	text-align: center;
+	color: white;
+	cursor: pointer;
+}
+
+#combatcontainer #helpico:hover {
+	color: var(--theme-ui-colors-primary);
+}
 
 #combatcontainer .switcher button {
     top: 0px;

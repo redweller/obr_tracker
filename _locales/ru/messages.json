@@ -4,13 +4,13 @@
 	"extensionDescription": { "message": "Простой трекер для симулятора настольной карты Owlbear Rodeo. Он позволяет отслеживать ходы, статы и броски кубов в процессе игры." },
 	"current_locale": { "message": "ru" },
 	
-	
+
 	"date_today": { "message": "сегодня" },
 	"date_yesterday": { "message": "вчера" },
 	"date_now": { "message": "сейчас! › " },
 	
 	"popup_orct_version": { "message": "Расширение" },
-	"popup_or_version": { "message": "Совместимо с" },
+	"popup_or_version": { "message": "Проверено с" },
 	"popup_sessions": { "message": "Последние игры" },
 	"popup_settings": { "message": "Настройки" },
 	"popup_no_sessions": { "message": "Сессий не найдено" },
@@ -30,5 +30,11 @@
 	"open_owlbear_page": { "message": "Открыть Owlbear" },
 	"save_settings": { "message": "Сохранить настройки" },
 	"saved_settings": { "message": "Сохранено!" },
-	"reload_to_apply": { "message": "Перезагрузите страницу" }
+	"reload_to_apply": { "message": "Перезагрузите страницу" },
+	
+	"help_icon": { "message": "Помощь" },
+	"help_about_link": { "message": "О расширении" },
+	"help_howto_link": { "message": "Руководство" },
+	"help_relnotes_link": { "message": "История версий" },
+	"help_close_link": { "message": "Закрыть" }
 }

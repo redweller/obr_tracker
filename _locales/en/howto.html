@@ -1,0 +1,250 @@
+<h1>
+User Guide
+</h1>
+<div style="width: 39%;display: inline-block;">
+	<h3 style="margin:0px">
+	Contents
+	</h3>
+	<ul id="contents">
+	</ul>
+</div>
+<div style="width: 60%;display: inline-block;">
+	<p>
+	OBR Tracker effectively consists of several modules, each providing separate distinctive features. Each feature can be enabled or disabled via popup menu. This guide covers installation issues and settings using popup menu, and then describes usage of each module.
+	</p>
+</div>
+
+
+<h2 id="install">
+Installation
+</h2>
+<p>
+The source code is available at <a target="blank" href="https://github.com/redweller/obr_tracker">GitHub Repository</a>, you may also use it to manually install OBR Tracker for your browser in developer mode. Also, pretty much like any other browser extension, OBRT is easily installed from web stores for all major browsers with a single click.
+</p>
+<h3>
+Desktop Install
+</h3>
+<p>
+Quick links to single-click installation from different Web Stores:</p>
+<ul>
+	<li><a target="blank" href="https://chrome.google.com/webstore/detail/owlbear-rodeo-combat-trac/lcfcmebjoechmikocfjjeocnljconfdp">Chrome Web Store</a></li>
+	<li><a target="blank" href="https://microsoftedge.microsoft.com/addons/detail/owlbear-rodeo-tracker/eejflcokmghbnkekboiflnpjjidcdjif">MS Edge Addons</a></li>
+	<li><a target="blank" href="https://addons.mozilla.org/firefox/addon/owlbear-combat-tracker/">Firefox AMO</a></li>
+	<li><a target="blank" href="https://addons.opera.com/extensions/details/owlbear-rodeo-tracker/">Opera Addons</a></li>
+</ul>
+<p>
+Most other browsers support installation from Chrome Web Store. Even for those using Opera, considering huge delay before publishing, it is not recommended to download the addon from Opera Store or you may end up with an outdated version - better download from Chrome Store instead.
+</p>
+<h3>
+Mobile Platforms
+</h3>
+<p>
+Due to restrictive policy towards mobile extensions by most vendors, OBRT is not available on major mobile browsers. This means there's no way to use it on iOS devices. However on Android there are less popular browsers that support Chrome extensions, and OBRT works just fine out of the box. Check out <a target="blank" href="https://kiwibrowser.com/">Kiwi Browser</a> for example.
+</p><p>
+If you prefer to stick to well-known browsers, other option is to use <a target="blank" href="https://play.google.com/store/apps/details?id=org.mozilla.fenix">Firefox Nightly</a>. Launching OBRT here will require some additional steps:
+</p>
+<ul>
+	<li>Open Menu -> Settings -> About Firefox Nightly</li>
+	<li>Tap on Firefox logo 5 times to enable Debug menu</li>
+	<li>Go back to Settings and open Custom Add-on collection</li>
+	<li>Enter ID: <strong>17070171</strong>, Collection name: <strong>obr</strong></li>
+</ul>
+<p>
+After that you can just open Addons menu and enable OBRT as a regular extension. Note that addon updates are disabled in this mode. More details on using extensions in Firefox Nightly are given in <a target="blank" href="https://blog.mozilla.org/addons/2020/09/29/expanded-extension-support-in-firefox-for-android-nightly/">this Mozilla article</a>.
+</p><p>
+Whichever browser you choose, the only difference from desktop version is extension button showing deep inside the browser menu, and the settings pop-up opens in fullscreen.
+</p>
+
+
+<h2 id="menu">
+Extension menu
+</h2>
+<p>
+Extension button - a small <img src="../images/combat16.png"> icon that appears on your browser's panel after you install this extension. Depending on the browser, it may require additional actions to appear. This button opens extension menu, which provides access to settings.
+</p>
+<img src="../images/help_menu.jpg" alt="Blank page with OBRT menu open" title="Blank page with OBRT menu open">
+<h3>
+Settings
+</h3>
+<p>
+Each module or additional feature can be enabled or disabled by ticking respective checkbox under Settings submenu. The options are listed below:
+</p>
+<ul>
+	<li>Combat tracker - completely enables/disables token list, combat rounds and the rest of corresponding features.</li>
+	<li>Dice tray log - completely enables/disables dice log overlay, as well as some additional tweaks to the OBR dice tray.</li>
+	<li>Dice roll sounds - completely enables/disables sound played on dice roll, both by you and when somebody else rolls a dice.</li>
+	<li>Start fullscreen - not exactly a module, just saves your time, automatically hiding native OBR panels (check this if you're not the GM or play on mobile).</li>
+</ul>
+<p>
+<span class="note">To apply these settings you must reload the OBR page.</span>
+</p>
+<h3>
+Recent games
+</h3>
+<p>
+Extension menu also keeps track of the recent games, and lets you quickly open a link to any recent game you've played in the current browser. If an Owlbear Rodeo game is open somewhere in your browser's tabs, you can just switch to this tab from the list.
+</p>
+<h3>
+Action button
+</h3>
+<p>
+Action button in the bottom of the extension menu changes depending on the context. It lets you quickly open OBR, or navigate to OBR tab if it's already open. If you change some settings - it lets you save changes, and then it lets you reload OBR page.
+</p>
+<h3>
+Versioning
+</h3>
+<p>
+First two lines of the menu represent version of the OBRT extension itself, and the latest version of OBR it was tested with.
+</p><p>
+OBRT version is useful to keep track of, cause different addon stores may not update simultaneously, and you may end up with different addon version from your pals (obviously, that's the situation you better avoid). Try manually updating your extension.
+</p><p>
+The Owlbear Rodeo reference version is useful for general troubleshooting. If you experience any troubles, it may mean that OBR had been updated and OBRT has stopped working - in this case OBR version specified on the launch screen will be greater then "Tested with OBR" version in OBRT menu. You'll just have to wait till the extension is updated.
+</p>
+
+
+<h2 id="combat">
+Combat tracker
+</h2>
+<p>
+A collapsible overlay at the top right corner with list of all characters, keeping track of combat turns, rounds and other optional minor stuff like HP, damage and conditions. It takes named tokens from the map and allows assigning them INIT values as well as other data.
+</p>
+<img src="../images/help_combat.jpg" alt="Combat tracker for GM and player" title="Combat tracker for GM and player">
+<h3>
+Important notes
+</h3>
+<ul>
+	<li>The combat tracker works with <strong>named tokens</strong> from the map. It won't show or manage tokens without name, or tokens other than characters.</li>
+	<li>The combat data is managed by one person (normally it should be map owner & GM), who enters all stats manually. Others can just see the stats he entered.</li>
+	<li>Other players <strong>need to have the same addon</strong> installed in order to see combat info. Of course they also need to have the Combat tracker enabled, but it's on by default.</li>
+</ul><p>
+<span class="note">Sharing combat stats relies on OBR's built-in sticky notes, and thus has some technical limitations. More on that in the <a href="#sharing">Sharing combat data</a> section.</span>
+</p>
+<h3>
+Characters list
+</h3>
+<p>
+When you first open a new map and start adding tokens, their names will appear on the tracker overlay. Colored dot near each entry represents circle outline color of the corresponding token (white if not specified).
+</p><p>
+As you add or remove tokens, the tracker will allways reflect current set of characters on the map. If you want to exclude some character from the combat tracker, remove the token's name or change token type to anything other then character (mount will do).
+</p>
+<h3>
+Assigning stats
+</h3>
+<p>
+One way of editing combat data is bulk stats assignment. The little <img src="../images/settings.png"> button in the lower left corner of Combat tracker opens menu, in which you can assign basic stats (initiative and, optionally, HP) to all characters. If some characters end up with the same initiative, their values will be highlighted red. Bulk editing is only available outside of combat, and it's enough to quicly start your encounter.
+</p><p>
+Other way is to edit individual stats for any character. Click on any entry opens stats for this character. Here you can specify more details - besides INIT and HP you also get to set damage and conditions/effects.
+</p>
+<h3>
+Managing combat
+</h3>
+<p>
+After you've assigned INIT to some characters, you'll notice they'll get reordered on the list according to those values. Characters without assigned INIT are greyed out - they're not a part of this fight. You can start combat by pressing Start at the bottom of the overlay as long as you have at least one character with Initiative.
+</p><p>
+Then you can switch turns by pressing "next", and the tracker will highlight current actor and count combat rounds for you. Any time you can click on a character to enter new conditions or damage. Conditions will automatically drop after set amount of rounds - their respective icons will disappear when "turns" value drops to zero.
+</p><p>
+To end combat, press on the swords in the bottom left. Confirmation message will be shown. If you confirm, ending combat will erase all initiative values (because normally for the next battle there will be new initiative rolls). To avoid this, hold your mouse over confirmation for 2 sec - the second button will appear, that will let you end combat and preserve INIT values.
+</p>
+<h3 id="sharing" style="padding-top: 30px;margin-top: -22px;">
+Sharing combat data
+</h3>
+<p>
+To initialize combat tracker data sharing, GM needs to create a visible unlocked Note with "!" (exclamation mark) somewhere outside the map. If you see some random symbols in this note after you've entered some combat stats - then you're doing right. These symbols are encoded combat data passed to other players through this note. The note itself serves entirely for technical puprose, so players don't need to see it or interact with it - drag it far away from the map and forget about it.
+</p><p>
+The OBR sticky note can store a limited amount of text, so the number of tokens for sharing is also limited (about 20 - 40 depending on how much data you enter). Deleted tokens on the same map also count. So if you have a horde of NPCs on the same map, and suddenly your players complain that the combat tracker is frozen - probably that's because the limit is reached. The meter in the lower part of Info tab will show you how close are you to reaching this limit.
+</p><p>
+Even if your players don't use OBRT you may still use it to track rounds instead of pen & paper. Then you might still want to add the sticky note, cause when data is shared, it's also saved between sessions.
+</p>
+<h3>
+Issues with data sharing
+</h3>
+<p>
+Possible reasons and solutions if other players have troubles seing your shared combat data:
+</p>
+<ul>
+	<li>First check if the Note you've created for data sharing (the one with !) is regular Sticky note, not locked, not invisible, in default mode. The data sharing won't work for locked notes, and obviously it won't work for hidden notes (cause then the players won't receive their data and Combat tracker won't be able to parse it).</li>
+	<li>Then check the switch in the Info tab of tracker settings. It has two options - Master & Client. Normally you don't have to switch them manually, but just in case: if you're the GM - this should be set to Master, and it should be Client for the rest of the players.</li>
+	<li>If the combat data sharing worked, but stopped refreshing at some point, probably that's because you have reached the limit of the managed items. Check Settings -> Info tab, the red Capacity bar indicates the limit is exceeded.</li>
+</ul><p>
+<span class="note">If nothing helps try deleting the technical note, and refresh the page. This should reset combat cache, so you can add stats again.</span>
+</p>
+<h3>
+Health & damage
+</h3>
+<p>
+You set health & damage values, and then the tracker calculates health status by substracting one from another. There's no incremental damage calculation, so you'll have to enter integral value each time.
+</p><p>
+On the tracker list, health status of each character is visually represented by 3 hearts, indicating general health from healthy (all 3 green) through lightly injured (1 red), seriously wounded (2 red) and to dying (0 green hearts remaining).
+</p>
+<h3>
+Effects & conditions
+</h3>
+<p>
+You can set up to 3 different conditions for each token in the character stats menu. For each condition/effect you can set its name and duration in rounds. Duration is used to track remaining turns during combat. Their icons represent 3 types of effects -
+</p><ul>
+	<li>bomb for physical effects</li>
+	<li>potion for chemical effects</li>
+	<li>book for magical effects</li>
+</ul><p>
+but these really don't matter much. Essentially it's just a place to store and track up to 3 effects, and the icons are there to visually distinguish them.
+</p>
+<h3>
+Hidden tokens and values
+</h3>
+<p>
+There are many situations you might want to use OBR's ability to hide tokens - enemy rogue sneaking around, or a dozen goblins lurking behind the wall. Hidden tokens are handled well by OBRT - the GM sees hidden NPCs on the combat tracker list, and they can take turns normally, while the other players stay unaware of their presense.
+</p><p>
+The same goes for HP values. Both maximum and actual health are visible only to GM. Other players won't see the exact HP values, just general condition (represented by heart icons) & total amount of damage done.
+</p>
+
+
+<h2 id="dice">
+Dice tracker
+</h2>
+<p>
+Small collapsible log overlay in the bottom-right corner of the screen keeping track of what exactly happened and when. It takes the values from left panel and puts them to the dice log. Unlike the native panel, it shows individual dice rolls with the timestamp, so no more wondering what dice were cast if the player has multiple dice in his tray.
+</p>
+<img src="../images/help_dice.jpg" alt="Dice log overlay" title="Dice log overlay">
+<h3>
+Log contents
+</h3>
+<p>
+Dice rolls are recorded with name and timestamp. Detailed info including individual dice values is always shown for the most recent roll. To see detailed dice roll info for previous rolls just point your mouse over them.
+</p><p>
+Also the log will display player connects/disconnects. If you have combat tracker enabled, the log will also display timestamps for the beginning of each new round. In a way, this overlay serves as a kind of a combat log, with more information then just dice rolls.
+</p>
+<h3>
+Prevent cheating
+</h3>
+<p>
+The current dice rolls implementation in OBR is rather straightforward. You have to explicitly enable sharing roll results to other players - and before you do, others have no idea of what dice you roll and even if you rolled them at all. Even when sharing is enabled dice roll results are only sent to other players at the moment the dice stops. This allows cheating in a couple of ways.
+</p><ul>
+	<li>Players can hide roll results by disabling dice sharing, roll multiple times untill they get desired results, and then reveal dice again. Others will see the last dice as if it's been just rolled by a player.</li>
+</ul><p>
+To counter this, addon doesn't allow hiding rolls at all. As for the players that would disable OBRT in order to cheat, the dice tracker tries to track when dice rolls are hidden. It shows message <em style="white-space: nowrap;">"[Playername]</em><em> tempts fate"</em> right before the roll. This message means that a person has just enabled dice sharing again. If you see this often, that means that a person is switching dice sharing on and off.
+</p><p>
+<span class="note">If you see <em style="white-space: nowrap;">"[Playername]</em><em> tempts fate"</em>, it most probably means this person's a cheater.</span>
+</p><ul>
+	<li>Even while dice sharing is enabled, if a player sees that dice is about to land with undesired result, one can grab it and toss again or press reroll - and do so till the satisfactory outcome.</li>
+</ul><p>
+To prevent this, reroll dice button is disabled and tray can't be clicked while dice still rolling. So anyone who has a working dice tracker won't be able to cheat by rerolling a dice before it stops.
+</p><p>
+<span class="note">Of course your players can still disable addon and reroll as much as they want.</span>
+</p>
+<h3>
+Dice tray tweaks
+</h3>
+<p>
+As mentioned above, to counter fudging the roll results, the "Share dice" mode is always on, rerolls are disabled, and dice tray cannot be interacted with while the dice are still moving. Besides that, not for some anti-cheating measures, but just for convenience the dice tray is hidden when you click on it, and emptied when it's being opened again.
+</p>
+
+
+<h2 id="sound">
+Dice roll sounds
+</h2>
+<p>
+Plays sound of dropping dice whenever you roll anything. This is purely cosmetic effect and doesn't add anything except for athmosphere and authenticity.
+</p>
+<p>
+If the dice tracker module is enabled, it also plays different sound whenever somebody else rolls a dice. This might actually come in handy to alert you of some important events.
+</p>

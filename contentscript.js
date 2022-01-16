@@ -9,10 +9,11 @@ else runtime = chrome.runtime;
 
 runtime.sendMessage({method: "getSettings"}, function(response) {
 	
-	const docbody = document.getElementsByTagName("body")[0];
+	const docbody = document.body;
 	const dochead = document.getElementsByTagName("head")[0];
 	settings = response;
 	docbody.setAttribute("settings",JSON.stringify(response));
+	docbody.setAttribute("obrtpath",runtime.getURL('/'));
 	
 	if (settings.combat || settings.dice) {
 		var maincss = document.createElement("link");

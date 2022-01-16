@@ -35,6 +35,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	
 	const locale = getLocaleText('current_locale');
 	const switcher = document.getElementById('switcher');
+	const help_button = document.getElementById('helpico');
 	const sessions_button = document.getElementById('sessions_button');
 	const settings_button = document.getElementById('settings_button');
 
@@ -48,6 +49,17 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 		document.getElementById('sessions').style.height = '0px';
 	});
 
+	help_button.addEventListener('click', function () {
+		let swidth = screen.width;
+		let sleft = (swidth - 700) / 2;
+		let params = `
+			popup=yes,
+			scrollbars=no,resizable=no,status=no,
+			location=no,toolbar=no,menubar=no,
+			width=700,height=700,left=${sleft},top=50
+		`;
+		window.open('help.html', 'About OBRT', params);
+	});
 	
 	
 	let s = result.settings;
@@ -68,6 +80,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	localize(document.body);
 	document.body.style.display = 'inherit';
 	document.documentElement.lang = locale;
+	document.addEventListener('contextmenu', event => event.preventDefault());
 	
 	const manifestData = chrome.runtime.getManifest();
 	const subtitle = document.getElementById('header').children[2];
