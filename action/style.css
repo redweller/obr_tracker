@@ -12,7 +12,8 @@ body {
 	user-select: none;
 }
 
-body #settings div div {
+#modules div div,
+#tweaks div div {
 	height: 25px;
 	padding-bottom: unset!important;
 }
@@ -37,7 +38,8 @@ button:hover {
 
 div#sessions div div:hover, 
 #switcher div#sessions_button:hover, 
-#switcher div#settings_button:hover {
+#switcher div#tweaks_button:hover,
+#switcher div#modules_button:hover {
 	text-shadow: 0 1px 1px #88a0a3a1;
 	color:#c57dd3;
 }
@@ -60,7 +62,7 @@ button:active {
 }
 
 label {
-	margin: 2px 10px;
+	margin: 2px 3px 2px 10px;
 	height: 15px;
 	display: inline-block;
 }
@@ -107,20 +109,22 @@ div#header div {
 }
 
 
-div#settings, div#sessions {
+div#sessions, div#modules, div#tweaks {
 	background-color: #7788991c;
-	height: 135px;
-	padding: 5px;
-	text-align: left;
-	overflow: hidden;
-	transition: height 0.5s;
+    height: 130px;
+    padding: 0px 5px;
+    text-align: left;
+    overflow: hidden;
+    transition: height 0.5s;
 }
 
-#settings #title, #sessions .title {
+#modules #title, #sessions .title, #tweaks .title {
 	padding: 6px;
 }
 
-#switcher div#sessions_button, #switcher div#settings_button {
+#switcher div#sessions_button, 
+#switcher div#tweaks_button, 
+#switcher div#modules_button {
 	text-align: left;
 	border-top: 1px solid #7788994d;
 	cursor: pointer;

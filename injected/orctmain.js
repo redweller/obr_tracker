@@ -77,6 +77,13 @@ const om = {
 				if (fsbutton) if (fsbutton.title == 'Enter Full Screen') fsbutton.click();
 				if (panelbutton) panelbutton.click();
 			}
+			if (settings.rt) {
+				const tbbutton = document.querySelector("div.css-1e2e67h > div.css-wcquo4 > div > div.css-1vluezq > button");
+				const handbutton = document.querySelector("div.css-wcquo4 > div > div.css-1vluezq > div > button:nth-child(3)")
+				tbbutton.addEventListener('click', () => {
+					handbutton.click();
+				})
+			}
 		
 		} else {
 			const targetNode = body;

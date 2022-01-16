@@ -10,6 +10,7 @@ const storage =  (function () {
 		dice: (true),
 		sound: (true),
 		fs: (false),
+		rt: (false),
 	};
 	
 	
@@ -27,6 +28,7 @@ const storage =  (function () {
 		settings.dice = set.dice || false ;
 		settings.sound = set.sound || false ;
 		settings.fs = set.fs || false ;
+		settings.rt = set.rt || false ;
 	}
 	
 	const processSessionsLog = function (time, guid, url) {

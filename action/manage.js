@@ -22,12 +22,14 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	let saved = false;
 	let save = document.getElementById('save');
 	let title = document.getElementById('title');
+	let ttitle = document.querySelector("#tweaks > div.title");
 	let s_cont = document.getElementById('sessions').lastElementChild;
 
 	let c_combt = document.getElementById('enable_combat');
 	let c_dicet = document.getElementById('enable_dice');
 	let c_sound = document.getElementById('enable_sound');
 	let c_fullscreen = document.getElementById('enable_fs');
+	let c_resettool = document.getElementById('enable_resett');
 
 	const siteq = /https:\/\/([\w.]*)owlbear\.rodeo([\w\/.]*)/;
 	const pageq = /https:\/\/([\w.]*)owlbear\.rodeo\/game\/([\w\/.]*)/;
@@ -37,16 +39,25 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	const switcher = document.getElementById('switcher');
 	const help_button = document.getElementById('helpico');
 	const sessions_button = document.getElementById('sessions_button');
-	const settings_button = document.getElementById('settings_button');
+	const modules_button = document.getElementById('modules_button');
+	const tweaks_button = document.getElementById('tweaks_button');
 
 	sessions_button.addEventListener('click', function () {
-		document.getElementById('settings').style.height = '0px';
+		document.getElementById('modules').style.height = '0px';
 		document.getElementById('sessions').style.height = '130px';
+		document.getElementById('tweaks').style.height = '0px';
 	});
 
-	settings_button.addEventListener('click', function () {
-		document.getElementById('settings').style.height = '130px';
+	modules_button.addEventListener('click', function () {
+		document.getElementById('modules').style.height = '130px';
 		document.getElementById('sessions').style.height = '0px';
+		document.getElementById('tweaks').style.height = '0px';
+	});
+	
+	tweaks_button.addEventListener('click', function () {
+		document.getElementById('tweaks').style.height = '130px';
+		document.getElementById('sessions').style.height = '0px';
+		document.getElementById('modules').style.height = '0px';
 	});
 
 	help_button.addEventListener('click', function () {
@@ -69,6 +80,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	if (s.dice) c_dicet.checked = true;
 	if (s.sound) c_sound.checked = true;
 	if (s.fs) c_fullscreen.checked = true;
+	if (s.rt) c_resettool.checked = true;
 	
 	if (isMobile()) document.body.style.margin = 'auto';
 
@@ -76,6 +88,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	c_dicet.addEventListener('click', resetAction);
 	c_sound.addEventListener('click', resetAction);
 	c_fullscreen.addEventListener('click', resetAction);
+	c_resettool.addEventListener('click', resetAction);
 	
 	localize(document.body);
 	document.body.style.display = 'inherit';
@@ -171,6 +184,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 		if (!pag.siteq) {
 			
 			title.textContent = getLocaleText('select_modules_and_goto');
+			ttitle.textContent = getLocaleText('select_tweaks_and_goto');
 			if (ttab) {
 				save.textContent = getLocaleText('goto_owlbear_tab');
 				save.disabled = false;
@@ -191,6 +205,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 			
 			if (!pag.pageq) {
 				title.textContent = getLocaleText('select_modules_and_start');
+				ttitle.textContent = getLocaleText('select_tweaks_and_start');
 				save.disabled = true;
 				if (saved) {
 					save.textContent = getLocaleText('saved_settings');
@@ -199,6 +214,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 				}
 			} else {
 				title.textContent = getLocaleText('select_modules_and_reload');
+				ttitle.textContent = getLocaleText('select_tweaks_and_reload');
 				if (saved) {
 					save.textContent = getLocaleText('reload_to_apply');
 					save.onclick = function () {
@@ -225,6 +241,7 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 					dice: (c_dicet.checked == true),
 					sound: (c_sound.checked == true),
 					fs: (c_fullscreen.checked == true),
+					rt: (c_resettool.checked == true),
 				}
 			});
 			saved = true;
