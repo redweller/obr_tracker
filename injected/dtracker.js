@@ -100,9 +100,11 @@ const ORCTdice = (function () {
 					continue;
 				}
 			}
-			const nodes = node.getElementsByClassName(obNeedles.dice_result_p_css);
-			for (const diceval of nodes) {
-				checkRolls(diceval, guid);
+			if (node.getElementsByClassName) {
+				const pnodes = node.getElementsByClassName(obNeedles.dice_result_p_css);
+				for (const diceval of pnodes) {
+					checkRolls(diceval, guid);
+				}
 			}
 		}
 	}
