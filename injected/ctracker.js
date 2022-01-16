@@ -10,6 +10,7 @@ const ORCTcombat = (function () {
 	let	turns = {};
 	let om = {};
 	let trackernodes = {};
+	let colors = {};
 	let tracker;
 	let processTracker;
 	let	container;
@@ -17,11 +18,15 @@ const ORCTcombat = (function () {
 	let curturn;
 	let mapGUID;
 	let notelength;
+	let fogcontainers = [];
 
 
 	function refreshState() {
 		refreshTracker();
-		if (master && Object.keys(combat).length) sendPackage();
+		if (master && 
+			(Object.keys(combat).length ||
+			Object.keys(colors).length))
+			sendPackage();
 	}
 
 	function haltState() {
@@ -85,12 +90,20 @@ const ORCTcombat = (function () {
 					if (mapGUID != src) {
 						mapGUID = src;
 						combat = {};
+						colors = {};
 						combatants = [];
 						turns = {};
 						notelength = 10;
 					}
 				} else {
 					mapGUID = src;
+				}
+			} else {
+				if (entity.attrs.points && 
+					entity.attrs.fillPatternImage && 
+					entity.attrs.fill && 
+					entity.attrs.stroke) {
+						fogcontainers = entity.parent.children;
 				}
 			};
 		}
@@ -137,6 +150,7 @@ const ORCTcombat = (function () {
 			guid,
 			turns,
 			cmbtr,
+			c: colors
 		});
 		const packed = LZString.compressToBase64(pckg);
 		const wrapped = '!|' + packed + '|';
@@ -147,27 +161,7 @@ const ORCTcombat = (function () {
 		}
 		const curtext = transport.attrs.text;
 		if (wrapped != curtext) {
-			const noteobj = Konva.shapes[container].parent;
-			const callForDialog = noteobj.eventListeners.click[0].handler;
-			const evtobj = {
-				currentTarget: noteobj, 
-				target: Konva.shapes[container], 
-				pointerId: 999, 
-				evt: { isTrusted: true }
-			};
-			callForDialog(evtobj);
-			const delivery = document.getElementById('changeNoteText');
-			if (!delivery) return;
-			if (delivery.value[0] != '!') return;
-			delivery.parentElement.parentElement.style.display = 'none';
-			if (delivery) {
-				let changeNote = {}
-				delivery.value = wrapped;
-				for (const prop in delivery) { 
-					if (prop.includes('__reactProps')) changeNote = delivery[prop]; 
-				}
-				changeNote.onChange({target: delivery});
-			}
+			fillNote(wrapped);
 		}
 	}
 
@@ -202,11 +196,14 @@ const ORCTcombat = (function () {
 							if (pckg.guid != guid) {
 								combat = pckg.combat;
 								turns = pckg.turns;
+								colors = pckg.c || {};
 								master = false;
 							} else {
-								if (!Object.keys(combat).length) {
+								if (!Object.keys(combat).length &&
+									!Object.keys(colors).length) {
 									combat = pckg.combat;
 									turns = pckg.turns;
+									colors = pckg.c || {};
 								}
 								master = true;
 							}
@@ -219,6 +216,31 @@ const ORCTcombat = (function () {
 		}
 		locked = false;
 	}
+	
+	function fillNote(txt) {
+		const transport = Konva.shapes[container];
+		if (!transport) return;
+		const noteobj = transport.parent;
+		const callForDialog = noteobj.eventListeners.click[0].handler;
+		const evtobj = {
+			currentTarget: noteobj, 
+			target: Konva.shapes[container], 
+			pointerId: 999, 
+			evt: { isTrusted: true }
+		};
+		callForDialog(evtobj);
+		const delivery = document.getElementById('changeNoteText');
+		if (!delivery) return;
+		if (delivery.value[0] != '!') return;
+		delivery.parentElement.parentElement.style.display = 'none';
+		let changeNote = {}
+		if (txt) delivery.value = txt;
+		for (const prop in delivery) { 
+			if (prop.includes('__reactProps')) changeNote = delivery[prop]; 
+		}
+		changeNote.onChange({target: delivery});
+	}
+	
 
 	function switchMapOwner(ismaster) {
 		if (!locked) {
@@ -268,6 +290,26 @@ const ORCTcombat = (function () {
 					}
 				}
 			}
+		}
+	}
+	
+	function setColorValues() {
+		const bgcheck = document.getElementById('ct_colorbg');
+		const fgcheck = document.getElementById('ct_hidefog');
+		const h = document.getElementById('ct_hue');
+		const s = document.getElementById('ct_sat');
+		const l = document.getElementById('ct_lum');
+		if (bgcheck.checked) {
+			colors.h = h.value;
+			colors.s = s.value;
+			colors.l = l.value;
+		} else {
+			colors = {};
+		}
+		if (fgcheck.checked) {
+			colors.f = 1;
+		} else {
+			delete colors.f;
 		}
 	}
 	
@@ -420,6 +462,80 @@ const ORCTcombat = (function () {
 		}
 	}
 	
+	function colorFog(c) {
+		if (document.querySelectorAll('.css-v0lvu6').length == 2) return;
+		for (const shp of fogcontainers) {
+			if ((shp.attrs.fill == 'rgba(34, 34, 34, 0.5)') ||
+				(shp.attrs.fillPriority == 'pattern'))
+				continue;
+			if (!c) c = 'rgb(34, 34, 34)';
+			if (shp.attrs.fill != c) {
+				shp.attrs.fill = c;
+				shp.attrs.stroke = c;
+				fillNote();
+			}
+		}
+	}
+	
+	function applyColor() {
+		let c = '';
+		if (colors.h) {
+			c = 'hsl('+colors.h+', '+colors.s+'%, '+colors.l+'%)';
+			document.body.style.background = c;
+			const lpane = document.querySelector('.css-1d9f0cb');
+			const rpane = document.querySelector('.css-4bdvxc');
+			if (lpane) lpane.style.background = 'var(--theme-ui-colors-overlay)';
+			if (rpane) rpane.style.background = 'var(--theme-ui-colors-overlay)';
+		} else {
+			c = 'hsl(230, 25%, 18%)';
+			document.body.removeAttribute('style');
+			const lpane = document.querySelector('.css-1d9f0cb');
+			const rpane = document.querySelector('.css-4bdvxc');
+			if (lpane) lpane.style.background = 'var(--theme-ui-colors-background)';
+			if (rpane) rpane.removeAttribute('style');
+		}
+		if (colors.f) {
+			colorFog(c);
+		} else {
+			colorFog();
+		}
+	}
+	
+	function adjustBg(ch, lim) {
+		if (ch.value < 0) ch.value = 0;
+		if (ch.value > lim) ch.value = lim;
+		if (!ch.value || isNaN(ch.value)) ch.value = (lim==100?25:230);
+	}
+	
+	function previewColor(el) {
+		const p = document.getElementById('bg_picker');
+		if (p) {
+			const bgcheck = document.getElementById('ct_colorbg');
+			const fgcheck = document.getElementById('ct_hidefog');
+			const h = document.getElementById('ct_hue');
+			const s = document.getElementById('ct_sat');
+			const l = document.getElementById('ct_lum');
+			if (bgcheck.checked) {
+				adjustBg(h, 360);
+				adjustBg(s, 100);
+				adjustBg(l, 100);
+				h.parentElement.classList.remove('hidden');
+				const c = 'hsl('+h.value+', '+s.value+'%, '+l.value+'%)';
+				if (p.style['background-color'] != c) {
+					p.style['background-color'] = c;
+					document.body.style.background = c;
+					if (fgcheck.checked) colorFog(c);
+					else colorFog();
+					if (el) if (el.parentElement.className == 'bg_colors') el.focus();
+				}
+			} else {
+				h.parentElement.classList.add('hidden');
+				document.body.removeAttribute('style');
+				if (fgcheck.checked) colorFog('hsl(230, 25%, 18%)');
+				else colorFog();
+			}
+		}
+	}
 	
 	function showHelp() {
 		let swidth = screen.width;
@@ -562,6 +678,10 @@ const ORCTcombat = (function () {
 		processTracker = clearInterval(processTracker);
 		var mode1 = (master ? 'checked="true"' : '');
 		var mode2 = (!master ? 'checked="true"' : '');
+		var mode3 = (colors.f ? 'checked="true"' : '');
+		var mode4 = (colors.h ? 'checked="true"' : '');
+		var hidehsl = (!colors.h ? 'hidden' : '');
+		//var hidestats = (master ? 'hidden' : '');
 		var hideinfo = (master ? 'hidden' : '');
 		var hideinfotab = (master ? ' off' : '');
 		var hidestatstab = (!master ? ' off' : '');
@@ -593,11 +713,44 @@ const ORCTcombat = (function () {
 		</div>`;
 		var html = `
 		<div id="cbtab_info" class="${clientmode} ${hideinfo} ${lockedmode}">
+			<form onsubmit="ORCTcombat.control.saveCtSettings()" autocomplete="off">
 			<div class="master_check">
 				<input type="radio" id="ct_mode1" name="ct_mode" value="master" ${mode1} onClick="ORCTcombat.control.switchMapOwner(true)">
 				<label for="ct_mode1">Master</label>
 				<input type="radio" id="ct_mode2" name="ct_mode" value="client" ${mode2} onClick="ORCTcombat.control.switchMapOwner(false)">
 				<label for="ct_mode2">Client</label>
+			</div>
+			<div class="fog_check">
+				<input type="checkbox" id="ct_hidefog" name="ct_hidefog" ${mode3} onClick="ORCTcombat.control.previewColor()">
+				<label for="ct_hidefog">Blend fog w/bg color</label>
+			</div>
+			<div class="bg_check">
+				<input type="checkbox" id="ct_colorbg" name="ct_colorbg" ${mode4} onClick="ORCTcombat.control.previewColor()">
+				<label for="ct_colorbg">Recolor background</label>
+				<div class="bg_colors ${hidehsl}">
+					<label title="Hue" for="ct_hue">H:</label>
+					<input title="Hue"
+								type="number" id="ct_hue" size="1" 
+								onkeyup="ORCTcombat.control.previewColor(this)"
+								onclick="this.focus()"
+								value="${colors.h || 230}"
+							>
+					<label title="Saturation" for="ct_sat">S:</label>
+					<input title="Saturation"
+								type="number" id="ct_sat" size="1" 
+								onkeyup="ORCTcombat.control.previewColor(this)" 
+								onclick="this.focus()"
+								value="${colors.s || 25}"
+							>
+					<label title="Lightness" for="ct_lum">L:</label>
+					<input title="Lightness"
+								type="number" id="ct_lum" size="1" 
+								onkeyup="ORCTcombat.control.previewColor(this)" 
+								onclick="this.focus()"
+								value="${colors.l || 18}"
+							>
+					<div title="Preview" id="bg_picker"></div>
+				</div>
 			</div>
 			<div class="info_text">
 				${infotext}
@@ -620,6 +773,7 @@ const ORCTcombat = (function () {
 					<span>Help</span>
 				</div>
 			</div>
+			</form>
 		</div>
 		`;
 		if (master) {
@@ -726,6 +880,7 @@ let oc = {
 		switchInfoTabs,
 		showHelp,
 		checkInit,
+		previewColor,
 	},
 	
 };

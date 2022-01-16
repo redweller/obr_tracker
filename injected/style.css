@@ -200,15 +200,48 @@
     padding: 10px 0px 5px 0px;
 }
 #combatcontainer .master_check input,
+#combatcontainer .fog_check input,
 #combatcontainer .bg_check input {
     margin: 1px 0px;
     vertical-align: bottom;
 }
 #combatcontainer .master_check label, 
+#combatcontainer .fog_check label, 
 #combatcontainer .bg_check label {
     padding: 0px 5px;
     margin: 0px;
     vertical-align: bottom;
+}
+#combatcontainer .fog_check {
+    padding: 3px 0px 3px 0px;
+}
+#combatcontainer .bg_colors {
+    padding-left: 5px;
+}
+#combatcontainer .bg_colors > input {
+    width: 22px;
+    font-size: 10px;
+    height: 19px;
+}
+#combatcontainer .bg_colors > label {
+    padding: 0px;
+}
+#combatcontainer div#bg_picker {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    vertical-align: bottom;
+    background-color: var(--theme-ui-colors-background);
+    border-radius: 10px;
+    margin-left: 8px;
+}
+.bg_colors input::-webkit-outer-spin-button, 
+.bg_colors input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.bg_colors input[type=number] {
+  -moz-appearance: textfield;
 }
 #combatcontainer .info_text {
     padding: 5px 0px;
@@ -219,6 +252,7 @@
 	pointer-events: none;
 	filter:brightness(0.5);
 }
+#cbtab_info.client .fog_check, 
 #cbtab_info.client .bg_check {
 	display: none;
 }
