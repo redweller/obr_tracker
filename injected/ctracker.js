@@ -9,12 +9,14 @@ const ORCTcombat = (function () {
 	let	combat = {};
 	let	turns = {};
 	let om = {};
+	let trackernodes = {};
 	let tracker;
 	let processTracker;
 	let	container;
 	let combatants;
 	let curturn;
 	let mapGUID;
+	let notelength;
 
 
 	function refreshState() {
@@ -85,6 +87,7 @@ const ORCTcombat = (function () {
 						combat = {};
 						combatants = [];
 						turns = {};
+						notelength = 10;
 					}
 				} else {
 					mapGUID = src;
@@ -137,6 +140,7 @@ const ORCTcombat = (function () {
 		});
 		const packed = LZString.compressToBase64(pckg);
 		const wrapped = '!|' + packed + '|';
+		notelength = wrapped.length;
 		if (wrapped.length>1024) {
 			console.log('Note character limit reached');
 			return;
@@ -173,6 +177,7 @@ const ORCTcombat = (function () {
 			if (delivery) {
 				var handin = delivery.attrs.text;
 				var unwrap = handin.split('|');
+				if (!master || !notelength) notelength = handin.length;
 				if ((unwrap.length==3) && (unwrap[0]=='!')) {
 					var pckg = om.safeJSONParse(LZString.decompressFromBase64(unwrap[1]));
 					if (pckg) {
@@ -395,11 +400,26 @@ const ORCTcombat = (function () {
 			}
 		}
 	}
+
 	
+	function switchInfoTabs(el) {
+		if (master) {
+			if (el.parentElement.id=='cbset_stats') {
+				var switch_id = 'cbset_info';
+				var mute_id = 'cbtab_info';
+				var show_id = 'cbtab_stats';
+			} else {
+				var switch_id = 'cbset_stats';
+				var mute_id = 'cbtab_stats';
+				var show_id = 'cbtab_info';
+			}
+			el.parentElement.classList.remove('off');
+			document.getElementById(switch_id).classList.add('off');
+			document.getElementById(show_id).classList.remove('hidden');
+			document.getElementById(mute_id).classList.add('hidden');
+		}
+	}
 	
-	function scrollTracker(event) {
-		for (const node of event.path) if (node.className == 'wrapscroll') var tnode = node;
-		tnode.scrollTop = tnode.scrollTop + event.deltaY;
 	}
 
 	function outputCombat(ch) {
@@ -531,17 +551,55 @@ const ORCTcombat = (function () {
 		processTracker = clearInterval(processTracker);
 		var mode1 = (master ? 'checked="true"' : '');
 		var mode2 = (!master ? 'checked="true"' : '');
-		var html = `<div class="cv_title">
-		<input type="radio" id="ct_mode1" name="ct_mode" value="master" ${mode1} onClick="ORCTcombat.control.switchMapOwner(true)">
-		<label for="ct_mode1">Master</label>
-		<input type="radio" id="ct_mode2" name="ct_mode" value="client" ${mode2} onClick="ORCTcombat.control.switchMapOwner(false)">
-		<label for="ct_mode2">Client</label>
+		var hideinfo = (master ? 'hidden' : '');
+		var hideinfotab = (master ? ' off' : '');
+		var hidestatstab = (!master ? ' off' : '');
+		var noteprc = Math.round(100 * notelength / 1024);
+		var clientmode = (!master ? 'client' : '');
+		var lockedmode = (locked ? 'locked' : '');
+		var notecheck_width = '';
+		if (!notelength) noteprc = 0;
+		if (container && locked) {
+			var infotext = 'Combat data sharing is enabled. Please enjoy your game.';
+		} else {
+			var infotext = 'To share or store your combat data for this map please create a '+
+				om.getIcon('note')+' Sticky Note with ! (exclamation mark) in it.';
+		}
+		if (noteprc) {
+			notecheck_width = 'style="width:'+noteprc+'%;"';
+			if (noteprc>100) 
+				notecheck_width = 'style="width:100%;border-bottom-color: red;"';
+		}
+		if (notelength > 1024)
+			infotext = 'You have exceeded the limit of characters that can be stored. Other players now can\'t see your updates';
+		trackernodes.topmenu.innerHTML = `
+		<div class="cv_tabs ${clientmode}">
+			<div class="gap"></div>
+			<div class="cv_tab ${hideinfotab}" id="cbset_info"><div onClick="ORCTcombat.control.switchInfoTabs(this)">Info</div></div>
+			<div class="gap"></div>
+			<div class="cv_tab ${hidestatstab}" id="cbset_stats"><div onClick="ORCTcombat.control.switchInfoTabs(this)">Stats</div></div>
+			<div class="gap"></div>
+		</div>`;
 		var html = `
+		<div id="cbtab_info" class="${clientmode} ${hideinfo} ${lockedmode}">
 			<div class="master_check">
 				<input type="radio" id="ct_mode1" name="ct_mode" value="master" ${mode1} onClick="ORCTcombat.control.switchMapOwner(true)">
 				<label for="ct_mode1">Master</label>
 				<input type="radio" id="ct_mode2" name="ct_mode" value="client" ${mode2} onClick="ORCTcombat.control.switchMapOwner(false)">
 				<label for="ct_mode2">Client</label>
+			</div>
+			<div class="info_text">
+				${infotext}
+			</div>
+			<div class="info_helper" title="${noteprc}%">
+				<div class="notecheck">
+					<div class="notetext">
+						Sharing capacity
+					</div>
+					<div id="note_occupied" ${notecheck_width}>
+					</div>
+				</div>
+			</div>
 		</div>
 		`;
 		if (master) {
@@ -578,7 +636,7 @@ const ORCTcombat = (function () {
 		<button class="css-1olwjck-IconButton" onClick="ORCTcombat.control.refreshTracker()" title="Cancel">
 			${om.getIcon('cancel')}
 		</button> 
-		<button class="css-1olwjck-IconButton" onClick="ORCTcombat.control.setInitValues()" title="Save stats">
+		<button class="css-1olwjck-IconButton ${clientmode}" onClick="ORCTcombat.control.saveCtSettings()" title="Save stats">
 			${om.getIcon('save')}
 		</button></div>
 		`;
@@ -643,8 +701,9 @@ let oc = {
 		prevTurn,
 		showSettings,
 		setValues,
-		setInitValues,
+		saveCtSettings,
 		switchMapOwner,
+		switchInfoTabs,
 		checkInit,
 	},
 	

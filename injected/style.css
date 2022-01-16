@@ -10,21 +10,21 @@
 .combatvals div {display: table-row;min-height:20px;padding-top:7px;}
 .combatvals div div {display: table-cell;padding-left:5px;}
 .combatvals input, .cv_effects input {height: 19px;width: 35px;}
-.cv_action {text-align:center; margin:0px 5px;border-top:1px solid white;}
+.cv_action {text-align:center; margin:0px 5px;border-top:1px solid var(--theme-ui-colors-gray);}
 
 .cv_effects {display:table;padding-bottom:8px;padding-left:7px;}
 .cv_effects div {display: table-row;min-height:20px;padding-top:3px;}
 .cv_effects div div {display: table-cell;padding-left:5px;text-align:center;}
 .cv_effects svg {width: 15px; height: 15px;vertical-align:bottom;}
 
-.cv_settings {display:table;padding-bottom:8px;padding-left:5px;}
+.cv_settings {display:table;padding-bottom:8px;padding-left:2px;padding-top: 5px;}
 .cv_settings div {display: table-row;min-height:20px;padding-top:3px;}
 .cv_settings div.header {font-weight:bold;height:23px;cursor: default;}
 .cv_settings input {height:18px;width:35px;}
 .cv_settings div div {display: table-cell;padding-left:5px;text-overflow: ellipsis;white-space: nowrap;max-width: 69px;}
 .cv_settings div div:first-child {overflow: hidden;cursor: default;}
 .cv_settings div div.double input { background-color: #a42b2b6b; }
-.cv_title label, .cv_title input {vertical-align: text-bottom;}
+.cv_tabs label, .cv_tabs input {vertical-align: text-bottom;}
 
 .ct_hp a {color:#646464bd;}
 .ct_hp0 a, .ct_hp1 a, .ct_hp2 a {color: #a000006b;}
@@ -133,11 +133,112 @@
     padding-top: 4px;
 }
 
+#combatcontainer .cv_tabs {
+	text-align: center;
+    margin: 0px 5px;
+    padding-top: 6px;
+    width: 155px;
+    display: flex;
 }
 
-#combatcontainer .wrapscroll::-webkit-scrollbar {
+#combatcontainer .gap {
+    width: 19px;
+    height: 19px;
+    display: inline-block;
+    border-bottom: 1px solid var(--theme-ui-colors-gray);
+    box-sizing: border-box;
+    vertical-align: bottom;
+}
+
+#combatcontainer .cv_tab {
+    width: 50px;
+    height: 19px;
+    display: inline-block;
+    border: 1px solid var(--theme-ui-colors-gray);
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    border-bottom: none;
+    border-radius: 4px 4px 0px 0px;
+	background-color: rgba(255,255,255,5%);
+}
+
+#combatcontainer .cv_tab > div {
+    height: 16px;
+    border-radius: 4px 4px 0px 0px;
+	cursor: pointer;
+}
+#combatcontainer .cv_tab.off > div {
+    border: 1px solid var(--theme-ui-colors-gray);
+}
+#combatcontainer .cv_tab.off {
+    border: none;
+    border-bottom: 1px solid var(--theme-ui-colors-gray);
+}
+#combatcontainer .cv_tabs.client > .cv_tab.off {
+    background: none;
+}
+#combatcontainer .cv_tabs.client > .cv_tab.off > div {
+    display: none;
+}
+#combatcontainer .hidden {
 	display: none;
 }
+
+#combatcontainer div#cbtab_info {
+    padding: 0px 5px;
+    margin: 0px 5px;
+    background-color: rgba(255,255,255,5%);
+}
+#combatcontainer div#cbtab_stats {
+    background-color: rgba(255,255,255,5%);
+    margin: 0px 0px 0px 5px;
+	max-width: 155px;
+}
+#combatcontainer .master_check {
+    padding: 10px 0px 5px 0px;
+}
+#combatcontainer .master_check input,
+#combatcontainer .bg_check input {
+    margin: 1px 0px;
+    vertical-align: bottom;
+}
+#combatcontainer .master_check label, 
+#combatcontainer .bg_check label {
+    padding: 0px 5px;
+    margin: 0px;
+    vertical-align: bottom;
+}
+#combatcontainer .info_text {
+    padding: 5px 0px;
+    margin-bottom: 8px;
+}
+#cbtab_info.locked .master_check input,
+#cbtab_info.locked .master_check label {
+	pointer-events: none;
+	filter:brightness(0.5);
+}
+#cbtab_info.client .bg_check {
+	display: none;
+}
+.notecheck {
+    display: inline-block;
+    height: 26px;
+    width: 115px;
+    border-bottom: 3px solid hsla(255, 100%, 100%, 20%);
+}
+.notetext {
+    padding: 0px;
+    margin: 0px;
+    height: 26px;
+}
+div#note_occupied {
+    border-bottom: 3px solid var(--theme-ui-colors-primary);
+    position: relative;
+    top: -3px;
+    width: 3%;
+}
+
 
 #combatcontainer .switcher button {
     top: 0px;
@@ -177,6 +278,7 @@
 #combatcontainer .finishtext {
 	cursor: pointer;
 }
+
 
 
 #dicecontainer {
