@@ -261,7 +261,7 @@ let od = {
 	t: function () {return players},
 		
 	launch: function () {
-		this.node.innerHTML = '<div></div><div class="dicelog"></div><div></div>';
+		this.node.innerHTML = '<div></div><div class="wrapscroll"><div class="dicelog"></div></div><div></div>';
 		lognode = this.node.getElementsByClassName('dicelog')[0];
 		om = ORCT;
 		
@@ -315,7 +315,11 @@ let od = {
 			});
 		}
 		
-		this.node.onwheel = scrollTracker;
+		this.node.onwheel = (evt) => {
+			const node = document.querySelector('#dicecontainer div.wrapscroll');
+			if (node) node.scrollTop = node.scrollTop + evt.deltaY;		
+		};
+		
 		const ruletohidereroll = '{ visibility: hidden;cursor:default!important; }';
 		sheet.insertRule('.css-cn6g20-IconButton, .css-cn6g20-IconButton:hover '+ruletohidereroll, sheet.cssRules.length);
 		

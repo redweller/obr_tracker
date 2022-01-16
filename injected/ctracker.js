@@ -110,7 +110,12 @@ const ORCTcombat = (function () {
 			}
 		}
 		
-		tracker.innerHTML = '<div class="wrapscroll"><div class="trackervals">'+list+'</div></div>'+manageTurns();	
+		trackernodes.topmenu.innerHTML = '';
+		trackernodes.main.innerHTML = '<div class="trackervals">'+list+'</div>';
+		trackernodes.botmenu.innerHTML = manageTurns();
+		
+		applyColor();
+		
 		if (!processTracker) processTracker = setInterval(refreshTracker, 3000);
 	}
 
@@ -259,6 +264,13 @@ const ORCTcombat = (function () {
 				}
 			}
 		}
+	}
+	
+	function saveCtSettings() {
+		const check_tab = document.getElementById('cbtab_stats');
+		if (!check_tab) return;
+		if (check_tab.className == 'hidden') setColorValues();
+		else setInitValues();
 		refreshState();
 	}
 
@@ -509,7 +521,9 @@ const ORCTcombat = (function () {
 		<button class="css-1olwjck-IconButton" onClick="ORCTcombat.control.setValues('${id}')" title="Save stats">
 			${om.getIcon('save')}
 		</button></div>`
-		tracker.innerHTML = settrack;
+		trackernodes.main.innerHTML = settrack;
+		trackernodes.topmenu.innerHTML = '';
+		trackernodes.botmenu.innerHTML = '';
 	}
 
 
@@ -522,11 +536,17 @@ const ORCTcombat = (function () {
 		<label for="ct_mode1">Master</label>
 		<input type="radio" id="ct_mode2" name="ct_mode" value="client" ${mode2} onClick="ORCTcombat.control.switchMapOwner(false)">
 		<label for="ct_mode2">Client</label>
+		var html = `
+			<div class="master_check">
+				<input type="radio" id="ct_mode1" name="ct_mode" value="master" ${mode1} onClick="ORCTcombat.control.switchMapOwner(true)">
+				<label for="ct_mode1">Master</label>
+				<input type="radio" id="ct_mode2" name="ct_mode" value="client" ${mode2} onClick="ORCTcombat.control.switchMapOwner(false)">
+				<label for="ct_mode2">Client</label>
 		</div>
 		`;
 		if (master) {
-			html += `<div class="wrapscroll">
-				<form onsubmit="ORCTcombat.control.setInitValues()" autocomplete="off">
+			html += `<div id="cbtab_stats">
+				<form onsubmit="ORCTcombat.control.saveCtSettings()" autocomplete="off">
 				<input type="submit" style="position: absolute; left: -9999px"/>
 				<div class="cv_settings">
 					<div class="header"><div>Name</div><div>Init</div><div>HP</div></div>
@@ -553,7 +573,8 @@ const ORCTcombat = (function () {
 				`;
 			}
 		}
-		html += `</div></div></form><div class="cv_action">
+		html += `</div></div></form>`;
+		trackernodes.botmenu.innerHTML = `<div class="cv_action">
 		<button class="css-1olwjck-IconButton" onClick="ORCTcombat.control.refreshTracker()" title="Cancel">
 			${om.getIcon('cancel')}
 		</button> 
@@ -561,7 +582,7 @@ const ORCTcombat = (function () {
 			${om.getIcon('save')}
 		</button></div>
 		`;
-		tracker.innerHTML = html;
+		trackernodes.main.innerHTML = html;
 		checkInit();
 	}
 
@@ -590,9 +611,22 @@ let oc = {
 		document.getElementsByTagName('canvas')[1].onclick = refreshState;
 		window.onblur = haltState;
 		window.onfocus = resumeState;
+				
+		trackernodes.topmenu = document.createElement('div');
+		trackernodes.main = document.createElement('div');
+		trackernodes.botmenu = document.createElement('div');
+		trackernodes.main.className = 'wrapscroll';
+		
+		this.node.onwheel = (evt) => {
+			const node = document.querySelector('#combatcontainer div.wrapscroll');
+			if (node) node.scrollTop = node.scrollTop + evt.deltaY;		
+		};
+		
+		tracker.appendChild(trackernodes.topmenu);
+		tracker.appendChild(trackernodes.main);
+		tracker.appendChild(trackernodes.botmenu);
 		
 		if (!processTracker) refreshTracker();
-		this.node.onwheel = scrollTracker;
 		
 	},
 	
@@ -612,9 +646,6 @@ let oc = {
 		setInitValues,
 		switchMapOwner,
 		checkInit,
-		
-		turns: () => {return turns},
-		combat: () => {return combat},
 	},
 	
 };
