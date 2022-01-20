@@ -43,21 +43,15 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	const tweaks_button = document.getElementById('tweaks_button');
 
 	sessions_button.addEventListener('click', function () {
-		document.getElementById('modules').style.height = '0px';
-		document.getElementById('sessions').style.height = '130px';
-		document.getElementById('tweaks').style.height = '0px';
+		switchSection('sessions');
 	});
 
 	modules_button.addEventListener('click', function () {
-		document.getElementById('modules').style.height = '130px';
-		document.getElementById('sessions').style.height = '0px';
-		document.getElementById('tweaks').style.height = '0px';
+		switchSection('modules');
 	});
 	
 	tweaks_button.addEventListener('click', function () {
-		document.getElementById('tweaks').style.height = '130px';
-		document.getElementById('sessions').style.height = '0px';
-		document.getElementById('modules').style.height = '0px';
+		switchSection('tweaks');
 	});
 
 	help_button.addEventListener('click', function () {
@@ -82,7 +76,10 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	if (s.fs) c_fullscreen.checked = true;
 	if (s.rt) c_resettool.checked = true;
 	
-	if (isMobile()) document.body.style.margin = 'auto';
+	if (isMobile()) {
+		document.body.className = 'mobile';
+		document.body.parentElement.style = 'padding-top: calc(50vh - 275px);'
+	}
 
 	c_combt.addEventListener('click', resetAction);
 	c_dicet.addEventListener('click', resetAction);
@@ -94,6 +91,9 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 	document.body.style.display = 'inherit';
 	document.documentElement.lang = locale;
 	document.addEventListener('contextmenu', event => event.preventDefault());
+	if (Object.keys(l).length <=1) {
+		switchSection('modules');
+	}
 	
 	const manifestData = chrome.runtime.getManifest();
 	const subtitle = document.getElementById('header').children[2];
@@ -123,6 +123,15 @@ runtime.sendMessage({method: "getStorage"}, function(result) {
 				}
 			}
 		}
+	}
+	
+	function switchSection (id) {
+		for (const section of ['sessions','modules','tweaks']) {
+			const section_div = document.getElementById(section);
+			if (section_div) section_div.className = 'collapse';
+		}
+		const section_div = document.getElementById(id);
+		if (section_div) section_div.removeAttribute('class');
 	}
 	
 	function getRelatedDay (date) {
