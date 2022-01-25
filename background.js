@@ -42,7 +42,7 @@ function checkCurrentTab() {
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		if (tabs[0]) {
 			if (tabs[0].url.match(/https:\/\/([\w.]*)owlbear\.rodeo([\w\/.]*)/) != null) {
-				action.setPopup({popup: '/action/markup.html'});
+				action.setPopup({popup: '/action/popup.html'});
 				action.setIcon({path: {
 					"16": "/images/combat16.png",
 					"32": "/images/combat32.png",
@@ -53,7 +53,7 @@ function checkCurrentTab() {
 				return;
 			}
 		}
-		action.setPopup({popup: '/action/markup.html'});
+		action.setPopup({popup: '/action/popup.html'});
 		action.setIcon({path: {
 			"16": "/images/off16.png",
 			"32": "/images/off32.png",

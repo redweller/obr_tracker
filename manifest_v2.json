@@ -16,7 +16,7 @@
 	},
 	
 	"browser_action": {
-		"default_popup": "/action/markup.html",
+		"default_popup": "/action/popup.html",
 		"default_icon": {
 			"16": "/images/combat16.png",
 			"32": "/images/combat32.png",
@@ -36,7 +36,7 @@
 		{
 			"matches": [ "https://*.owlbear.rodeo/*" ],
 			"run_at": "document_end",
-			"js": [ "contentscript.js" ]
+			"js": [ "/action/contentscript.js" ]
 		}
 	],
 	  
