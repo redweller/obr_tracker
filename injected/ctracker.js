@@ -20,6 +20,8 @@ const ORCTcombat = (function () {
 	let notelength;
 	let fogcontainers = [];
 	let turnstate = '';
+	let highlighted = '';
+	let highlight = true;
 
 
 	function refreshState() {
@@ -223,14 +225,7 @@ const ORCTcombat = (function () {
 		const transport = Konva.shapes[container];
 		if (!transport) return;
 		const noteobj = transport.parent;
-		const callForDialog = noteobj.eventListeners.click[0].handler;
-		const evtobj = {
-			currentTarget: noteobj, 
-			target: Konva.shapes[container], 
-			pointerId: 999, 
-			evt: { isTrusted: true }
-		};
-		callForDialog(evtobj);
+		invokeDialog (noteobj);
 		const delivery = document.getElementById('changeNoteText');
 		if (!delivery) return;
 		if (delivery.value[0] != '!') return;
@@ -241,6 +236,17 @@ const ORCTcombat = (function () {
 			if (prop.includes('__reactProps')) changeNote = delivery[prop]; 
 		}
 		changeNote.onChange({target: delivery});
+	}
+	
+	function invokeDialog (node) {
+		const caller = node.eventListeners.click[0].handler;
+		const evtobj = {
+			currentTarget: node, 
+			target: node, 
+			pointerId: 999, 
+			evt: { isTrusted: true }
+		};
+		caller(evtobj);
 	}
 	
 
@@ -298,6 +304,7 @@ const ORCTcombat = (function () {
 	function setColorValues() {
 		const bgcheck = document.getElementById('ct_colorbg');
 		const fgcheck = document.getElementById('ct_hidefog');
+		const hgcheck = document.getElementById('ct_highlight');
 		const h = document.getElementById('ct_hue');
 		const s = document.getElementById('ct_sat');
 		const l = document.getElementById('ct_lum');
@@ -312,6 +319,11 @@ const ORCTcombat = (function () {
 			colors.f = 1;
 		} else {
 			delete colors.f;
+		}
+		if (hgcheck.checked) {
+			highlight = true;
+		} else {
+			highlight = false;
 		}
 	}
 	
@@ -338,6 +350,7 @@ const ORCTcombat = (function () {
 		if (turns.battle) {
 			turns.current++;
 			passEffects();
+			highlightChar();
 			var curnum = getTurnOrder(turns.current);
 			var curchar = combatants[curnum];
 			var thisturn = true;
@@ -346,10 +359,12 @@ const ORCTcombat = (function () {
 			else if (!curchar.init) thisturn = false;
 			if (thisturn) {
 				turns.active = curchar.id;
+				highlightChar(curchar.key);
 			} else {
 				turns.active = combatants[getTurnOrder(0)].id;
 				turns.currentRound++;
 				turns.current = 0;
+				highlightChar(combatants[getTurnOrder(0)].key);
 			}
 		} else {
 			first = combatants[getTurnOrder(0)];
@@ -358,6 +373,7 @@ const ORCTcombat = (function () {
 				turns.active = first.id;
 				turns.currentRound = 1;
 				turns.current = 0;
+				highlightChar(first.key);
 			}
 		}
 		refreshState();
@@ -371,6 +387,29 @@ const ORCTcombat = (function () {
 			turns.active = curchar.id;
 			refreshTracker();
 		}
+	}
+	
+	function highlightChar(curchar) {
+		if (!highlight) return;
+		let switchoff = false;
+		if (curchar) {
+			highlighted = curchar;
+		} else {
+			if (!highlighted) return;
+			curchar = highlighted;
+			highlighted = '';
+			switchoff = true;
+		}
+		let charobj = Konva.shapes[curchar].parent.parent.parent.parent;
+		if (!charobj) return;
+		if (!charobj.eventListeners) return;
+		invokeDialog(charobj);
+		let dialog = document.querySelector('.css-2qb2ir > .css-18mg9wb');
+		if (!dialog) return;
+		dialog.parentElement.parentElement.style.display = 'none';
+		let colorselector = document.querySelector('.css-2qb2ir > .css-18mg9wb > .css-wym4ve');
+		if (switchoff == !colorselector.childElementCount) return;
+		colorselector.click();
 	}
 
 	function getTurnOrder(t) {
@@ -419,6 +458,7 @@ const ORCTcombat = (function () {
 				combat[t].init = '';
 			}
 		}
+		highlightChar();
 		turns = {};
 		refreshState();
 	}
@@ -694,6 +734,7 @@ const ORCTcombat = (function () {
 		var mode2 = (!master ? 'checked="true"' : '');
 		var mode3 = (colors.f ? 'checked="true"' : '');
 		var mode4 = (colors.h ? 'checked="true"' : '');
+		var mode5 = (highlight ? 'checked="true"' : '');
 		var hidehsl = (!colors.h ? 'hidden' : '');
 		//var hidestats = (master ? 'hidden' : '');
 		var hideinfo = (master ? 'hidden' : '');
@@ -733,6 +774,10 @@ const ORCTcombat = (function () {
 				<label for="ct_mode1">Master</label>
 				<input type="radio" id="ct_mode2" name="ct_mode" value="client" ${mode2} onClick="ORCTcombat.control.switchMapOwner(false)">
 				<label for="ct_mode2">Client</label>
+			</div>
+			<div class="highlight_check">
+				<input type="checkbox" id="ct_highlight" name="ct_highlight" ${mode5}>
+				<label for="ct_highlight">Highlight active char</label>
 			</div>
 			<div class="fog_check">
 				<input type="checkbox" id="ct_hidefog" name="ct_hidefog" ${mode3} onClick="ORCTcombat.control.previewColor()">

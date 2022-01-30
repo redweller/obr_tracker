@@ -203,12 +203,14 @@
 }
 #combatcontainer .master_check input,
 #combatcontainer .fog_check input,
+#combatcontainer .highlight_check input,
 #combatcontainer .bg_check input {
 	margin: 1px 0px;
 	vertical-align: bottom;
 }
 #combatcontainer .master_check label, 
 #combatcontainer .fog_check label, 
+#combatcontainer .highlight_check label, 
 #combatcontainer .bg_check label {
 	padding: 0px 5px;
 	margin: 0px;
@@ -262,6 +264,7 @@
 	pointer-events: none;
 	filter:brightness(0.5);
 }
+#cbtab_info.client .highlight_check, 
 #cbtab_info.client .fog_check, 
 #cbtab_info.client .bg_check {
 	display: none;
