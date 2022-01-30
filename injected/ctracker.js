@@ -19,6 +19,7 @@ const ORCTcombat = (function () {
 	let mapGUID;
 	let notelength;
 	let fogcontainers = [];
+	let turnstate = '';
 
 
 	function refreshState() {
@@ -51,9 +52,10 @@ const ORCTcombat = (function () {
 			if (entity._partialText) {
 				if (entity.parent.parent.parent.parent.attrs['name'] == 'character') {
 					var id = entity.parent.parent.parent.parent.attrs.id.slice(0,8);
-					window.NEW = entity.parent.parent.parent.parent
+					//window.NEW = entity.parent.parent.parent.parent
 					var combatant = {
 						id: id,
+						key: shp,
 						salt: entity.parent.parent.parent.parent._id,
 						name: entity._partialText,
 						color: entity.parent.parent.parent.children[0].children[0].attrs.stroke,
@@ -128,7 +130,7 @@ const ORCTcombat = (function () {
 		
 		trackernodes.topmenu.innerHTML = '';
 		trackernodes.main.innerHTML = '<div class="trackervals">'+list+'</div>';
-		trackernodes.botmenu.innerHTML = manageTurns();
+		manageTurns();
 		
 		applyColor();
 		
@@ -194,15 +196,15 @@ const ORCTcombat = (function () {
 								}
 							}
 							if (pckg.guid != guid) {
-								combat = pckg.combat;
-								turns = pckg.turns;
+								combat = pckg.combat || {};
+								turns = pckg.turns || {};
 								colors = pckg.c || {};
 								master = false;
 							} else {
 								if (!Object.keys(combat).length &&
 									!Object.keys(colors).length) {
-									combat = pckg.combat;
-									turns = pckg.turns;
+									combat = pckg.combat || {};
+									turns = pckg.turns || {};
 									colors = pckg.c || {};
 								}
 								master = true;
@@ -553,7 +555,7 @@ const ORCTcombat = (function () {
 		var c = combatants[ch];
 		var e = outputEffects(c.id);
 		return `
-		<div class="${c.inactive} ${c.turn}" onClick="ORCTcombat.control.enterValues('${ch}')">
+		<div class="${c.inactive} ${c.turn}" onClick="ORCTcombat.control.enterValues('${ch}')" translate="no">
 			<div><span style="color:${c.color};font-weight:bolder;">•</span></div>
 			<div class="ct_name" title="${c.name}">${c.name}</div>
 			<div class="ct_hp ct_hp${c.status}" title="${c.health}"><a class="hp1">♥</a><a class="hp2">♥</a><a class="hp3">♥</a></div>
@@ -568,6 +570,7 @@ const ORCTcombat = (function () {
 	function endCombat() {
 		if (!master) return;
 		processTracker = clearInterval(processTracker);
+		turnstate = 'end';
 		document.getElementById('turns').innerHTML = `
 		<button class="css-1olwjck-IconButton" style="float:left" onClick="ORCTcombat.control.refreshTracker()" title="Cancel">
 			${om.getIcon('cancel')}
@@ -588,8 +591,11 @@ const ORCTcombat = (function () {
 
 
 	function manageTurns() {
+		let output = '';
+		let curstate = '';
 		if (turns.battle && master) {
-			return `
+			curstate = 'round'+turns.currentRound;
+			output = `
 			<div id="turns" class="turns">
 				<span class="move_turn" onclick="ORCTcombat.control.endCombat()" title="Finish combat?">
 				Round ${turns.currentRound}
@@ -606,7 +612,8 @@ const ORCTcombat = (function () {
 			if (turns.currentRound) var currentRound = 'Round '+turns.currentRound + ' ' + om.getIcon('swords');
 			else currentRound = 'Not in combat';
 			if (locked) var cantset = 'inactive';
-			return `
+			curstate = currentRound;
+			output = `
 			<div id="turns" class="turns">
 				<span class="move_turn">
 				${currentRound}
@@ -618,7 +625,8 @@ const ORCTcombat = (function () {
 			var ctready = '';
 			if (!Object.keys(combatants).length) ctready = 'inactive';
 			else if (!combatants[getTurnOrder(0)].init) ctready = 'inactive';
-			return `
+			curstate = 'waiting';
+			output = `
 			<div id="turns" class="turns ${ctready}"><span class="move_turn" onClick="ORCTcombat.control.nextTurn()">
 				Start
 				${om.getIcon('swords')}</span>
@@ -626,11 +634,16 @@ const ORCTcombat = (function () {
 			</div>
 			`;
 		}
+		if (turnstate != curstate) {
+			turnstate = curstate;
+			trackernodes.botmenu.innerHTML = output;
+		}
 	}
 
 
 	function enterValues(ch) {
 		if (!master) return;
+		turnstate = 'edit';
 		processTracker = clearInterval(processTracker);
 		let name = combatants[ch].name;
 		let id = combatants[ch].id;
@@ -675,6 +688,7 @@ const ORCTcombat = (function () {
 
 
 	function showSettings() {
+		turnstate = 'settings';
 		processTracker = clearInterval(processTracker);
 		var mode1 = (master ? 'checked="true"' : '');
 		var mode2 = (!master ? 'checked="true"' : '');
@@ -831,7 +845,7 @@ let oc = {
 		const toolbarbutton = document.querySelector('.css-1vluezq').firstChild;
 		const combatswitcher = document.querySelector('#combatcontainer > div.switcher');
 		toolbarbutton.addEventListener("click", function() {
-			if (toolbarbutton.getAttribute('aria-label')!='Show Map Controls') {
+			if (toolbarbutton.className!='css-1fj1vmy-IconButton') {
 				tracker.style.right = '0px';
 				combatswitcher.firstElementChild.className = 'docked';
 			} else {

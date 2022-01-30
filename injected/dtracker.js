@@ -122,7 +122,7 @@ const ORCTdice = (function () {
 				resetbutton.style.pointerEvents = 'auto';
 			}
 			dicetracker = clearInterval(dicetracker);
-			outputDice(yourdice);
+			outputDice(yourdice, true);
 			yourdice = '';
 			return;
 		}
@@ -211,12 +211,12 @@ const ORCTdice = (function () {
 		}
 	}
 	
-	let outputDice = function (guid) {
+	let outputDice = function (guid, thisisyou) {
 		for (let name in players[guid]) {
 			const d = players[guid][name];
 			let yourroll = false;
 			let verb = ' rolls ';
-			if (name.includes('(you)')) {
+			if (thisisyou) {
 				name = 'You';
 				verb = ' roll ';
 				yourroll = true;
@@ -241,8 +241,8 @@ const ORCTdice = (function () {
 			}
 			const maintxt = name + verb +res;
 			const titletxt = txt;
-			const dicetxt = '<div class="dice">'+res + ' :' + dtx+'</div>';
-			od.outputLog(maintxt + dicetxt, titletxt);
+			const dicetxt = '<div class="dice" translate="no">'+res + ' :' + dtx+'</div>';
+			od.outputLog('<div>' + maintxt + '</div>' + dicetxt, titletxt);
 			if (!yourroll) om.Sound.play();
 		}
 		delete players[guid];

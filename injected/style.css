@@ -1,4 +1,3 @@
-.tracker table {font:normal}
 .tracker button {width:unset;height:unset;padding:1px 5px;}
 .tracker button.client {display:none;}
 .tracker input {color:white;background-color:transparent;border:medium none;border-bottom:1px solid grey;border-radius: 2px;}
@@ -53,9 +52,9 @@
 
 .wrapscroll {
 	max-height: 280px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin; /* 8 px */
+	overflow-y: auto;
+	overflow-x: hidden;
+	scrollbar-width: thin; /* 8 px */
 	scrollbar-color: rgba(0,0,0,0%) rgba(0,0,0,0%);
 }
 .wrapscroll:hover {
@@ -165,9 +164,12 @@
 }
 
 #combatcontainer .cv_tab > div {
-    height: 16px;
-    border-radius: 4px 4px 0px 0px;
+	height: 16px;
+	border-radius: 4px 4px 0px 0px;
 	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 #combatcontainer .cv_tab.off > div {
     border: 1px solid var(--theme-ui-colors-gray);
@@ -202,15 +204,23 @@
 #combatcontainer .master_check input,
 #combatcontainer .fog_check input,
 #combatcontainer .bg_check input {
-    margin: 1px 0px;
-    vertical-align: bottom;
+	margin: 1px 0px;
+	vertical-align: bottom;
 }
 #combatcontainer .master_check label, 
 #combatcontainer .fog_check label, 
 #combatcontainer .bg_check label {
-    padding: 0px 5px;
-    margin: 0px;
-    vertical-align: bottom;
+	padding: 0px 5px;
+	margin: 0px;
+	vertical-align: bottom;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: inline-block;
+	max-width: 125px;
+}
+#combatcontainer .master_check label {
+	max-width: 54px;
 }
 #combatcontainer .fog_check {
     padding: 3px 0px 3px 0px;
@@ -271,9 +281,13 @@
     border-bottom: 3px solid hsla(255, 100%, 100%, 20%);
 }
 .notetext {
-    padding: 0px;
-    margin: 0px;
-    height: 26px;
+	padding: 0px;
+	margin: 0px;
+	height: 26px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 114px;
 }
 div#note_occupied {
     border-bottom: 3px solid var(--theme-ui-colors-primary);
@@ -388,7 +402,7 @@ div#note_occupied {
     opacity: unset;
 }
 
-.dicelog .entry div:first-child {
+.dicelog .entry > div:first-child {
 	float: left;
 }
 
