@@ -436,3 +436,103 @@ div#note_occupied {
 .dicelog .entry:last-child div:last-child .dice, .dicelog .entry:hover div:last-child .dice {
     display: unset;
 }
+
+.css-kvyrub {
+    box-sizing: border-box;
+    margin: 0px;
+    min-width: 0px;
+    position: absolute;
+    top: 36px;
+    right: 0px;
+}
+.css-kvyrub:last-child {
+    top: 0px;
+}
+.css-1gx1hhr-IconButton {
+    box-sizing: border-box;
+    min-width: 0px;
+    appearance: none;
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    padding: 4px;
+    width: 32px;
+    height: 32px;
+    color: inherit;
+    border: none;
+    margin: 8px;
+    background-color: var(--theme-ui-colors-overlay);
+    border-radius: 50%;
+}
+button.css-1gx1hhr-IconButton.swords svg {
+    width: 18px;
+    height: 18px;
+}
+button.css-1gx1hhr-IconButton.swords {
+    color: hsl(260, 20%, 40%);
+}
+.css-kvyrub.obrt button.css-1gx1hhr-IconButton.swords:hover {
+	color: var(--theme-ui-colors-primary);
+	cursor: pointer;
+}
+button.css-1gx1hhr-IconButton.swords.on {
+    color: white;
+}
+.css-kvyrub:last-child button.css-1gx1hhr-IconButton.swords:not(.on) {
+    display: none;
+}
+.obrt-dialog-label {
+    box-sizing: border-box;
+    margin: 0px;
+    min-width: 0px;
+    width: 100%;
+    display: flex;
+    font-weight: 400;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.obrt-dialog-text {
+    box-sizing: border-box;
+    margin: 0px 0px 8px;
+    min-width: 0px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    font-weight: 200;
+    font-size: 12px;
+    color: var(--theme-ui-colors-gray);
+}
+.obrt-dialog-actions {
+    box-sizing: border-box;
+    margin: 0px;
+    min-width: 0px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    display: flex;
+}
+.obrt-dialog-button {
+    box-sizing: border-box;
+    min-width: 0px;
+    appearance: none;
+    display: inline-block;
+    text-align: center;
+    line-height: inherit;
+    text-decoration: none;
+    font-size: inherit;
+    padding: 8px 16px;
+    border-image: initial;
+    border-radius: 4px;
+    color: var(--theme-ui-colors-text);
+    background-color: transparent;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--theme-ui-colors-text);
+    font-family: "Bree Serif", Georgia, serif;
+    margin: 4px 4px 4px 0px;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+}
+.obrt-dialog-button:hover {
+	border-color: var(--theme-ui-colors-highlight);
+    cursor: pointer;
+}

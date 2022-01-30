@@ -757,8 +757,8 @@ const ORCTcombat = (function () {
 		if (container && locked) {
 			var infotext = 'Combat data sharing is enabled. Please enjoy your game.';
 		} else {
-			var infotext = 'To share or store your combat data for this map please create a '+
-				om.getIcon('note')+' Sticky Note with ! (exclamation mark) in it.';
+			var infotext = 'To share & store your combat data enable this feature on map selection screen or create a '+
+				om.getIcon('note')+' Sticky Note with "!" in it.';
 		}
 		if (noteprc) {
 			notecheck_width = 'style="width:'+noteprc+'%;"';
@@ -885,6 +885,199 @@ const ORCTcombat = (function () {
 		trackernodes.main.innerHTML = html;
 		checkInit();
 	}
+	
+	let db = {};
+	let maps = {};
+	let obruserid = null;
+
+	function processMaps() {
+		let maps, states;
+		const transaction = db.transaction(['states','maps'], 'readonly');
+		const stored_maps = transaction.objectStore('maps');
+		let request = stored_maps.getAll();
+		request.onsuccess = function(event) {
+			maps = {};
+			request.result.forEach((map) => {maps[map.id] = map});
+			const stored_states = transaction.objectStore('states');
+			request = stored_states.getAll();
+			request.onsuccess = function(event) {
+				const states = request.result;
+				const statelist = [];
+				request.result.forEach( (state,i) => {
+					statelist[maps[state.mapId].name] = i;
+				});
+				processButtons(states,statelist);
+			}
+		};
+	}
+
+	function processRemoval(stateid, btn) {
+		const transaction = db.transaction(["states"], "readwrite");
+		const statesStore = transaction.objectStore("states");
+		let request = statesStore.get(stateid);
+		request.onsuccess = function (event) {
+			let state = request.result;
+			for (const n in state.notes) {
+				if (!state.notes[n].text) continue;
+				if (state.notes[n].text[0] == '!') {
+					delete state.notes[n];
+				}
+			}
+			request = statesStore.put(state);
+			request.onsuccess = function(event) {
+				processButtonReaction(false, stateid, btn);
+			};
+		}
+	}
+
+	function processAddition(stateid, btn) {
+		const transaction = db.transaction(['states'], "readwrite");
+		const stateStore = transaction.objectStore('states');
+		let request = stateStore.get(stateid);
+		request.onsuccess = function(event) {
+			let state = request.result;
+			let userguid = {guid: ORCT.getGUID()};
+			let date = new Date() * 1;
+			let noteid = ORCT.getRandomID();
+			let notetxt = LZString.compressToBase64(JSON.stringify(userguid));
+			let note = {
+				color: 'black',
+				id: noteid,
+				lastModified: date,
+				lastModifiedBy: obruserid,
+				locked: false,
+				rotation: 0,
+				size: 1,
+				text: '!|'+notetxt+'|',
+				textOnly: false,
+				visible: true,
+				x: -10,
+				y: 0,
+			};
+			if (checkNotes(state.notes)) {
+				btn.classList.add('on');
+			} else {
+				state.notes[noteid] = note;
+				const stateStore = transaction.objectStore('states');
+				request = stateStore.put(state);
+				request.onerror = () => {};
+				request.onsuccess = function(event) {
+					processButtonReaction(true, stateid, btn);
+				};
+			}
+		};
+	}
+
+	function processButtons(states,statelist) {
+		const btns = document.getElementsByClassName('css-kvyrub obrt');
+		if (!btns.length) return;
+		for (const btn of btns) {
+			const nm = btn.getAttribute('name');
+			const state = states[statelist[nm]];
+			const icon = btn.children[0];
+			if (!state) continue;
+			if (checkNotes(state.notes)) {
+				processButtonReaction(true, state.mapId, icon);
+			} else {
+				processButtonReaction(false, state.mapId, icon);
+			}
+		}
+	}
+	
+	function processButtonReaction(ison, stateid, icon) {
+		const btn = icon.parentElement;
+		if (ison) {
+			icon.title = 'OBRT Sharing currently ON';
+			icon.classList.add('on');
+			btn.onclick = () => {showDisConfirmation(stateid,icon)};
+		} else {
+			icon.title = 'OBRT Sharing currently OFF';
+			icon.classList.remove('on');
+			btn.onclick = () => {processAddition(stateid,icon)};
+		}
+	}
+
+	function checkNotes(notes) {
+		for (const n in notes) {
+			if (!notes[n].text) continue;
+			if (notes[n].text[0] == '!') return true;
+		}
+		return false;
+	}
+
+	function manageThumbs() {
+		if (!maps.length) return;
+		for (const map of maps) {
+			const btns = map.getElementsByClassName('obrt');
+			if (btns.length) return;
+			const div = document.createElement('div');
+			const btn = document.createElement('button');
+			const name = map.getAttribute('aria-label');
+			div.setAttribute('name',name);
+			div.className = 'css-kvyrub obrt';
+			btn.className = 'css-1gx1hhr-IconButton swords';
+			map.appendChild(div);
+			div.appendChild(btn);
+			btn.innerHTML = ORCT.getIcon('swords');
+		}
+		processMaps();
+	}
+
+	function waitForIt () {
+		const portals = document.getElementsByClassName('ReactModalPortal');
+		const obsconfig = {childList: true, subtree: true,};
+		for (const portal of portals) {
+			const observer = new MutationObserver(modalChecker);
+			observer.observe(portal, obsconfig);
+		}
+		let request = indexedDB.open('OwlbearRodeoDB',410);
+		request.onerror = function(event) {
+			console.log("Database error: " + event.target.errorCode);
+		};
+		request.onsuccess = function(event) {
+			db = event.target.result;
+			const transaction = db.transaction(['user'], "readonly");
+			const userStore = transaction.objectStore('user');
+			let request = userStore.get('userId');
+			request.onsuccess = function(event) {
+				obruserid = request.result.value;
+			}
+		};
+	}
+
+	function modalChecker (changeList) {
+		for (const c in changeList) {
+			const change = changeList[c];
+			if (change.addedNodes.length) {
+				for (const node of change.addedNodes) {
+					if (!node.getElementsByClassName) continue;
+					const dialog = node.getElementsByClassName('css-vurnku')[0];
+					if (dialog) {
+						if (!dialog.getElementsByClassName) continue;
+						maps = dialog.getElementsByClassName('css-1faj2pb');
+						if (maps.length) manageThumbs();
+					}
+				}
+			}
+		}
+	}
+
+	function showDisConfirmation(stateid, btn) {
+		html = `
+	<div class="ReactModal__Overlay ReactModal__Overlay--after-open" style="position: fixed; inset: 0px; background-color: rgba(0, 0, 0, 0.73); z-index: 100; display: flex; align-items: center; justify-content: center;"><div class="ReactModal__Content ReactModal__Content--after-open" tabindex="-1" role="dialog" aria-modal="true" style="position: absolute; inset: initial; border: 1px solid rgb(204, 204, 204); background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: var(--theme-ui-colors-background); overflow: auto; border-radius: 4px; outline: none; padding: 20px; max-height: 100%; max-width: 300px; opacity: 1; transform: scale(1);"><div class="css-vurnku"><label class="obrt-dialog-label">Disable OBRT sharing</label><p class="obrt-dialog-text">This will disable OBRT data sharing and remove existing combat data. If this is your current map, you'll need to reopen it.</p><p class="obrt-dialog-text">Once applied, this operation cannot be undone.</p><div class="obrt-dialog-actions"><button class="obrt-dialog-button" id="obrt_dialog_cancel">Cancel</button><button class="obrt-dialog-button" id="obrt_dialog_disable">Disable</button></div></div><button id="obrt_dialog_close" title="Close" aria-label="Close" class="css-1kl6cmo-IconButton"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentcolor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button></div></div>
+		`;
+		const dialog = document.createElement('div');
+		const cancelfunc = () => {document.body.removeChild(dialog)};
+		dialog.className = 'ReactModalPortal';
+		dialog.innerHTML = html;
+		document.body.appendChild(dialog);
+		document.getElementById('obrt_dialog_cancel').onclick = cancelfunc;
+		document.getElementById('obrt_dialog_close').onclick = cancelfunc;
+		document.getElementById('obrt_dialog_disable').onclick = () => {
+			processRemoval(stateid, btn);
+			document.body.removeChild(dialog);
+		};
+	}
 
 let oc = {
 		
@@ -927,7 +1120,7 @@ let oc = {
 		tracker.appendChild(trackernodes.botmenu);
 		
 		if (!processTracker) refreshTracker();
-		
+		waitForIt();
 	},
 	
 	setGUID: function (setguid) {
