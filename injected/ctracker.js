@@ -66,6 +66,7 @@ const ORCTcombat = (function () {
 						status: '',
 						inactive: 'inactive',
 						turn: '',
+						concurrent: false,
 					};
 					if (combat[id]) {
 						let cstat = combat[id];
@@ -78,8 +79,14 @@ const ORCTcombat = (function () {
 							combatant.status = 2;
 						}
 						combatant.init = combat[id].init;
-						if (combatant.init != '')
+						if (combatant.init != '') {
 							combatant.inactive = '';
+							for (const key in combat) {
+								if ((combat[key].init == combatant.init) &&
+									(key != id)) 
+									combatant.concurrent = true;
+							}
+						}
 					}
 					combatant.sort = (combatant.init*1000)+(combatant.salt);
 					combatants[combatant.sort] = combatant;
@@ -594,10 +601,12 @@ const ORCTcombat = (function () {
 	function outputCombat(ch) {
 		var c = combatants[ch];
 		var e = outputEffects(c.id);
+		var cc = c.concurrent ? '<a title="Concurrent action">('+c.init+')</a>' : '';
 		return `
 		<div class="${c.inactive} ${c.turn}" onClick="ORCTcombat.control.enterValues('${ch}')" translate="no">
 			<div><span style="color:${c.color};font-weight:bolder;">•</span></div>
 			<div class="ct_name" title="${c.name}">${c.name}</div>
+			<div class="cc">${cc}</div>
 			<div class="ct_hp ct_hp${c.status}" title="${c.health}"><a class="hp1">♥</a><a class="hp2">♥</a><a class="hp3">♥</a></div>
 			<div>
 				${e}
