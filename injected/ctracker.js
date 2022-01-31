@@ -896,15 +896,21 @@ const ORCTcombat = (function () {
 		const stored_maps = transaction.objectStore('maps');
 		let request = stored_maps.getAll();
 		request.onsuccess = function(event) {
+			const list = request.result;
 			maps = {};
-			request.result.forEach((map) => {maps[map.id] = map});
+			list.forEach((map) => {
+				let unique = 0;
+				list.forEach((i) => {if (i.name == map.name) unique++;});
+				if (unique == 1) maps[map.id] = map;
+			});
 			const stored_states = transaction.objectStore('states');
 			request = stored_states.getAll();
 			request.onsuccess = function(event) {
 				const states = request.result;
 				const statelist = [];
 				request.result.forEach( (state,i) => {
-					statelist[maps[state.mapId].name] = i;
+					if (maps[state.mapId])
+						statelist[maps[state.mapId].name] = i;
 				});
 				processButtons(states,statelist);
 			}
@@ -973,9 +979,14 @@ const ORCTcombat = (function () {
 		if (!btns.length) return;
 		for (const btn of btns) {
 			const nm = btn.getAttribute('name');
-			const state = states[statelist[nm]];
 			const icon = btn.children[0];
-			if (!state) continue;
+			const state = states[statelist[nm]];
+			if (!state) {
+				btn.title = 'Can\'t process this map';
+				icon.classList.remove('on');
+				btn.onclick = null;
+				continue;
+			}
 			if (checkNotes(state.notes)) {
 				processButtonReaction(true, state.mapId, icon);
 			} else {
