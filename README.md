@@ -39,6 +39,6 @@ Each feature can be enabled or disabled via OBRT menu available through extensio
 
 ____
 
-Copyright 2021 Redweller (redweller@gmail.com)
+Copyright 2022 Redweller (redweller@gmail.com)
 
 Licensed under the Apache License, Version 2.0
